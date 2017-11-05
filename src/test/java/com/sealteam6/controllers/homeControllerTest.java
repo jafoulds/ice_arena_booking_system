@@ -1,4 +1,4 @@
-package com.team6.controllers;
+package com.sealteam6.controllers;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
