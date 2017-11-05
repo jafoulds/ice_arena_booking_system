@@ -1,25 +1,34 @@
 package com.sealteam6.controllers;
 
 import com.sealteam6.domainmodel.User;
-import com.sealteam6.domainmodel.UserRepository;
+import com.sealteam6.repository.UserDetailsRepository;
+import com.sealteam6.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+/**
+ * Temporary class for looking at User data
+ * in the browser.
+ */
 @RestController
-@RequestMapping("/user")
 public class UserController {
 
     @Autowired
-    UserRepository repository;
+    private UserRepository repository;
 
-    @RequestMapping(method = RequestMethod.POST)
-    public User user(@RequestBody User user) {
-        repository.save(user);
-        return repository.findByUsername(user.username);
+    @Autowired
+    private UserDetailsRepository userDetailsRepository;
+
+    @RequestMapping(name = "/findAll", method = RequestMethod.GET)
+    public List<User> getAllUsers() {
+        return repository.findAll();
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public User user(@RequestParam String username) {
-        return repository.findByUsername(username);
+    @RequestMapping(name = "/details")
+    public List<UserDetails> details() {
+        return userDetailsRepository.findAll();
     }
 }
