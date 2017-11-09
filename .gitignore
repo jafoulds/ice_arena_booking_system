@@ -7,3 +7,5 @@
 *.tar.gz
 *.rar
 target
+node_modules
+built
