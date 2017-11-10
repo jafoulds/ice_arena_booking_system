@@ -15,6 +15,7 @@ import java.util.List;
  * in the browser.
  */
 @RestController
+@RequestMapping("/api")
 public class UserController {
 
     @Autowired
