@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import java.util.Collection;
 
 @Getter
+@Setter
 public class User extends org.springframework.security.core.userdetails.User {
 
     private String emailAddress;
@@ -15,8 +16,6 @@ public class User extends org.springframework.security.core.userdetails.User {
         super(username, password, authorities);
         this.emailAddress = emailAddress;
     }
-
-
 
 
 
