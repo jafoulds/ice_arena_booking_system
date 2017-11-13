@@ -32,9 +32,8 @@ class TestComponent extends React.Component {
     render() {
         return (
             <div>
-                <ul>
-                    {this.state.users}
-                </ul>
+                <h2>Users</h2>
+                <ul>{this.state.users}</ul>
             </div>
         );
     }

@@ -20,5 +20,11 @@ module.exports = {
                 }
             }
         ]
+    },
+
+    watchOptions: {
+        poll: 1000,
+        ignored: ["/java/", "/node_modules/"]
     }
+
 };

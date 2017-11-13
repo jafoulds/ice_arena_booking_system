@@ -1,43 +1,25 @@
 package com.sealteam6.domainmodel;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
-import org.springframework.data.annotation.Id;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 @Getter
-@Setter
-public class User {
-
-    @Id
-    private String id;
-
-    private String username;
+public class User extends org.springframework.security.core.userdetails.User {
 
     private String emailAddress;
 
-    @JsonIgnore
-    private String password;
-
-    private List<String> roles;
-
-    public void addRole(String role) {
-        if (roles == null) {
-            roles = new ArrayList<>();
-        }
-        roles.add(role);
-    }
-
-    public User() {
-
-    }
-
-    public User(String username, String password, String emailAddress) {
-        this.username = username;
-        this.password = password;
+    public User(String username, String password, String emailAddress, Collection<? extends GrantedAuthority> authorities) {
+        super(username, password, authorities);
         this.emailAddress = emailAddress;
     }
+
+
+
+
+
+
 
 }

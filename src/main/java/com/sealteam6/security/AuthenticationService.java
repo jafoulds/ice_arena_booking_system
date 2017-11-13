@@ -1,6 +1,6 @@
 package com.sealteam6.security;
 
-import com.sealteam6.repository.UserDetailsRepository;
+import com.sealteam6.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,16 +11,16 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService implements UserDetailsService {
 
 
-    private UserDetailsRepository userDetailsRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    public AuthenticationService(UserDetailsRepository userDetailsRepository) {
-        this.userDetailsRepository = userDetailsRepository;
+    public AuthenticationService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDetails userDetails = userDetailsRepository.findByUsername(username);
+        UserDetails userDetails = userRepository.findByUsername(username);
         if (userDetails == null) {
             throw new UsernameNotFoundException(String.format("User %s does not exist", username));
         }
