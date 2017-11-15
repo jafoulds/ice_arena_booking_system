@@ -1,37 +1,37 @@
 package com.sealteam6.domainmodel;
 
-import lombok.Getter;
-//import java.util.Date;
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 
-@Getter
-public class Booking {
+import java.time.LocalDateTime;
+
+@Data
+public class Booking implements Comparable<Booking> {
 
     @Id
-    public String id;
-    
-    protected String startDate;
-    protected String endDate;
-    protected String rinkID;
-    protected String username;
-    
-    public Booking () {}
+    String id;
 
-    public Booking (String username, String startDate, String endDate, String rinkID){
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.rinkID = rinkID;
-        this.username = username;
-    }
+    LocalDateTime startDate;
+    LocalDateTime endDate;
+    Rink rink;
+    String usernameOfBooker;
+    String groupName;
 
     @Override
-    public String toString() {
-        return String.format(
-                "Booking[id=%s, startDate='%s', endDate='%s', rink = '%s', username='%s']",
-                id, startDate, endDate, rinkID, username);
+    public int compareTo(Booking o) {
+        if (startDate.equals(o.startDate)) {
+            return endDate.compareTo(o.endDate);
+        }
+        return startDate.compareTo(o.startDate);
     }
 
-
+    public Booking(LocalDateTime startDate, LocalDateTime endDate, Rink rink, String usernameOfBooker, String groupName) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.rink = rink;
+        this.usernameOfBooker = usernameOfBooker;
+        this.groupName = groupName;
+    }
 
 }
 

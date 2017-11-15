@@ -10,3 +10,6 @@ target
 node_modules
 built
 *.log
+.classpath
+.project
+.settings
