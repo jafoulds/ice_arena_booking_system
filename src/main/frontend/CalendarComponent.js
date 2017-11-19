@@ -2,8 +2,9 @@ import React from 'react';
 import BigCalendar from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
-import events from './events';
-import requests from './requests'
+import requests from './requests';
+import {CreateBookingComponent} from './CreateBookingComponent';
+import Modal from 'react-modal';
 
 BigCalendar.setLocalizer(
   BigCalendar.momentLocalizer(moment)
@@ -17,7 +18,7 @@ export class CalendarComponent extends React.Component {
     }
     componentDidMount() {
         this.getTimeSlots(new Date());
-     }
+    }
 
     getTimeSlots(date) {
         requests.getCalendar(date, (result) => {
@@ -32,7 +33,7 @@ export class CalendarComponent extends React.Component {
         });   
     }
 
-     calendarDayToDate(date, timeslot) {
+    calendarDayToDate(date, timeslot) {
         let start = new Date(
             date.year, 
             date.monthValue-1, //js dates are zero indexed
@@ -46,8 +47,8 @@ export class CalendarComponent extends React.Component {
             timeslot.endTime.hour,
             timeslot.endTime.minute);
         let title = this.getTitleForTimeSlot(timeslot);
-        return {start, end, title, allDay: false};
-     }
+        return {start, end, title, allDay: false, rink: timeslot.rink.id};
+    }
 
     getClockTimeString(time) {
         return (((time.hour-1) % 12)+1)+":"+ 
@@ -55,11 +56,20 @@ export class CalendarComponent extends React.Component {
             (time.hour < 12 ? 'am' : 'pm');
     }
 
-     getTitleForTimeSlot(timeslot) {
+    getTitleForTimeSlot(timeslot) {
         let start = this.getClockTimeString(timeslot.startTime);
         let end = this.getClockTimeString(timeslot.endTime);
         return 'rink ' + timeslot.rink.id + '\n' + start + '-' + end;
-     }
+    }
+
+    openModal(event) {
+        this.setState({
+            start: event.start, 
+            end: event.end, 
+            rink: event.rink,
+            isCreateBookingModalOpen: true
+        });
+    }
 
     render() {
         if (this.state.calendar.month && this.state.timeslots) {
@@ -69,13 +79,29 @@ export class CalendarComponent extends React.Component {
                     {this.state.calendar.month ? this.state.calendar.month.month : ""}
                 </h2> 
                 <BigCalendar
-                    {...this.props}
+                    selectable
+                    onSelectEvent={event=> {this.openModal(event)}}
                     events={this.state.timeslots}
                     views={['month', 'week', 'day']}
                     step={60}
                     defaultDate={new Date()}
                     onNavigate={(date) => {this.getTimeSlots(date)}}
                 />
+                <Modal
+                    isOpen={this.state.isCreateBookingModalOpen}
+                    contentLabel="Modal"
+                    style={{
+                        overlay: {
+                            zIndex : 1000
+                        }
+                    }}
+                >           
+                    <CreateBookingComponent 
+                        start={this.state.start}
+                        end={this.state.end}
+                        rink={this.state.rink}
+                    />
+                </Modal>
             </div>
 
             );
