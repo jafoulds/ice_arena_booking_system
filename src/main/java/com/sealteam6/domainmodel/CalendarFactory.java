@@ -4,16 +4,21 @@ import com.sealteam6.repository.BookingRepository;
 import com.sealteam6.repository.RinkRepository;
 import com.sealteam6.service.ArenaScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.time.*;
 import java.util.*;
 
+@Component
 public class CalendarFactory {
 
-    private BookingRepository bookingRepository;
 
+    @Autowired private BookingRepository bookingRepository;
+
+    @Autowired
     private RinkRepository rinkRepository;
 
+    @Autowired
     private ArenaScheduleService arenaScheduleService;
 
     @Autowired
@@ -78,16 +83,10 @@ public class CalendarFactory {
         for (Booking booking : bookings) {
             LocalTime bookingStartTime = booking.getStartDate().toLocalTime();
             LocalTime bookingEndTime = booking.getEndDate().toLocalTime();
-
-            if (bookingStartTime.isBefore(startOfTimeSlot)) {
-                startOfTimeSlot = bookingEndTime.isAfter(startOfTimeSlot) ? bookingEndTime : startOfTimeSlot;
-
-            } else {
-                if (!startOfTimeSlot.equals(bookingStartTime)) {
-                    availableTimeSlots.add(new TimeSlot(startOfTimeSlot, bookingStartTime, rink));
-                }
-                startOfTimeSlot = bookingEndTime;
+            if (!startOfTimeSlot.equals(bookingStartTime)) {
+                availableTimeSlots.add(new TimeSlot(startOfTimeSlot, bookingStartTime, rink));
             }
+            startOfTimeSlot = bookingEndTime;
         }
         if (startOfTimeSlot.isBefore(closingTime)) {
             availableTimeSlots.add(new TimeSlot(startOfTimeSlot, closingTime, rink));
