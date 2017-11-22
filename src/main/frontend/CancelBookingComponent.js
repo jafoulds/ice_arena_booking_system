@@ -4,7 +4,7 @@ import {CalendarComponent} from './CalendarComponent';
 import Modal from 'react-modal';
 const API = 'http://localhost:8080/api';
 
-export class CreateBookingComponent extends React.Component {
+export class CancelBookingComponent extends React.Component {
 
         constructor(props) {
         	super(props);
