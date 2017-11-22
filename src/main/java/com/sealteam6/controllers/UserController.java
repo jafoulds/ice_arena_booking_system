@@ -3,6 +3,8 @@ package com.sealteam6.controllers;
 import com.sealteam6.domainmodel.User;
 import com.sealteam6.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,9 +21,12 @@ public class UserController {
     private UserRepository userRepository;
 
 
-    @RequestMapping(value = "/findAll", method = RequestMethod.GET)
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    @RequestMapping(value = "/getCurrentUser", method = RequestMethod.GET)
+    public String getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication.getName());
+        String username = authentication.getName();
+        return username;
     }
 
 }

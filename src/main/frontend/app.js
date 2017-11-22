@@ -5,6 +5,7 @@ import {Temp} from './temp'
 const API = 'http://localhost:8080/api';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { Header } from './headerComponent';
+import {ProfilePage} from './profilePage';
 
 exports.API = API;
 
@@ -12,6 +13,7 @@ class App extends React.Component {
 
     constructor(props) {
         super(props);
+        console.log(ProfilePage);
     }
 
     render() {
@@ -20,6 +22,7 @@ class App extends React.Component {
                 <Header />
                 <Route exact path='/calendar' component={CalendarComponent} />
                 <Route exact path='/temp' component={Temp} />
+                <Route path='/' component={ProfilePage} />
             </div>
         );
     }

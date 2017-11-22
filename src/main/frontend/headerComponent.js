@@ -42,8 +42,8 @@ export class Header extends React.Component {
 		          		</Link>
 			          </div>
 			          <div className="navbar-brand col-2">
-			          	<Link to="/temp" style={this.state.color}>
-			          		Temp
+			          	<Link to="/group" style={this.state.color}>
+			          		Groups
 		          		</Link>
 			          </div>
 			          <div className="navbar-brand col-2">
