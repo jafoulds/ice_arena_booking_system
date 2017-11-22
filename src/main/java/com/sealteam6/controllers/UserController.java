@@ -22,11 +22,9 @@ public class UserController {
 
 
     @RequestMapping(value = "/getCurrentUser", method = RequestMethod.GET)
-    public String getCurrentUser() {
+    public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication.getName());
-        String username = authentication.getName();
-        return username;
+        return userRepository.findByUsername(authentication.getName());
     }
 
 }

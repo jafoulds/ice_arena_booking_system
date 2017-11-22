@@ -5,6 +5,7 @@ import com.sealteam6.domainmodel.Group;
 import com.sealteam6.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,13 +30,16 @@ public class GroupController {
     }
 
     @RequestMapping("/createGroup")
-    public HttpStatus createGroup(@RequestParam String groupName, @RequestParam String username) {
-        List<String> groupMemebers = new ArrayList<>();
-        groupMemebers.add(username);
+    public HttpStatus createGroup(@RequestParam String groupName) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        List<String> groupMembers = new ArrayList<>();
+        groupMembers.add(username);
+
 
         Group group = Group.builder()
                 .groupName(groupName)
-                .groupMembers(groupMemebers)
+                .groupMembers(groupMembers)
                 .ownerName(username)
                 .build();
         groupRepository.save(group);

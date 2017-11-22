@@ -16,13 +16,10 @@ module.exports = {
     	);
     },
 
-    createGroup: (groupName, username, callback) => {
-    	fetch(API + "/createGroup?" + 'groupName=' + groupName+ '&username=' + username, 
+    createGroup: (groupName, callback) => {
+    	fetch(API + "/createGroup?" + 'groupName=' + groupName,
     		{credentials: 'same-origin'})
             .then(result => {
-            	console.log(result);
-                return result.json();
-            }).then(result => {
             	callback(result)
             }
     	);	
@@ -31,8 +28,7 @@ module.exports = {
     getCurrentUser: (callback) => {
     	fetch(API + '/getCurrentUser', {credentials: 'same-origin'})
     		.then(result => {
-    			// return result.json();
-    			return 'ben';
+    			return result.json();
             }).then(result => {
     			callback(result);
     		});

@@ -28,15 +28,10 @@ export class CreateGroup extends React.Component {
 		);
 	}
 
-
-
 	createGroup(e) {
-		console.log('trying');
 		e.preventDefault();
-		requests.getCurrentUser((username)=> {
-			requests.createGroup(this.state.groupName, username, (resp) => {
-				console.log(resp);
-			});
+		requests.createGroup(this.state.groupName, (resp)=> {
+			console.log(resp);
 		});
 
 	}
