@@ -92,7 +92,8 @@ export class CalendarComponent extends React.Component {
                     contentLabel="Modal"
                     style={{
                         overlay: {
-                            zIndex : 1000
+                            zIndex : 1000,
+                            width : 500
                         }
                     }}
                 >           

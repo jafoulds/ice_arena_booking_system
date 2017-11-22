@@ -1,9 +1,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-import {CalendarComponent} from './CalendarComponent'
-const API = 'http://localhost:8080/api';
 
-exports.API = API;
+const API = 'http://localhost:8080/api';
 
 class TestComponent extends React.Component {
 
@@ -29,33 +27,18 @@ class TestComponent extends React.Component {
             }
         );
 
-        // Sample api call. Calls showBookings then maps bookings to li tag containing usernames.
-        fetch(API + "/showBookings", {credentials: 'same-origin'})
-            .then(result => {
-                return result.json();
-            }).then(result => {
-                let newBookings = [];
-                result.forEach((item) => {
-                    newBookings.push(item.id);
-                });
-                newBookings = newBookings.map((item, index) => {
-                    return (<li key={index}>{item}</li>)
-                });
-                this.setState({bookings: newBookings});
-            }
-        );
-
     }
 
     render() {
         return (
             <div>
-            <p>hello</p>
+                <h2>Users</h2>
+                <ul>{this.state.users}</ul>
             </div>
         );
     }
 
 }
 
-ReactDOM.render(<CalendarComponent />, document.getElementById('react'))
+ReactDOM.render(<TestComponent />, document.getElementById('react'))
 

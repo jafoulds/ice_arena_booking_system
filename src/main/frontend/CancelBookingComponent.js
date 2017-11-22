@@ -29,12 +29,13 @@ export class CreateBookingComponent extends React.Component {
                                 <th>Rink:</th>
                                 <td>{this.props.rink}</td>
                             </tr>
-
+                            <tr>
+                                <td>
+                                    <button type="submit" onClick={(e) => requests.cancelBooking(e, this.props.start, this.props.end, this.props.rink)}>Remove This Booking</button>
+                                    <button>Cancel</button>
+                                </td>
+                            </tr>
                         </tbody></table>
-                        <div>
-                            <button type="submit" onClick={(e) => requests.addBooking(e, this.props.start, this.props.end, this.props.rink)}>Book This Rink</button>
-                            <button>Cancel</button>
-                        </div>
                   </div>
            );
         }
