@@ -10,9 +10,13 @@ import java.util.Date;
 import java.util.List;
 
 @Value
-public class CalendarDay {
+public class CalendarDay implements Comparable<CalendarDay> {
 
     LocalDate date;
     List<TimeSlot> availableTimeSlots;
 
+    @Override
+    public int compareTo(CalendarDay o) {
+        return date.compareTo(o.getDate());
+    }
 }

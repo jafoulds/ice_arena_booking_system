@@ -16,6 +16,6 @@ public class CalendarController {
 
     @RequestMapping(value = "api/getCalendar", method = RequestMethod.GET)
     public Calendar getCalendar(@RequestParam int year, @RequestParam int month) {
-        return calendarFactory.createCalendar(month, year);
+        return calendarFactory.createCalendarOfAvailableTimeSlots(month, year);
     }
 }

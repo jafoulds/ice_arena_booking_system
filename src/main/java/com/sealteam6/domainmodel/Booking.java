@@ -1,6 +1,7 @@
 package com.sealteam6.domainmodel;
 
 import lombok.Data;
+import lombok.Value;
 import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
@@ -9,13 +10,13 @@ import java.time.LocalDateTime;
 public class Booking implements Comparable<Booking> {
 
     @Id
-    String id;
+    private String id;
 
-    LocalDateTime startDate;
-    LocalDateTime endDate;
-    Rink rink;
-    String usernameOfBooker;
-    String groupName;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+    private Rink rink;
+    private String usernameOfBooker;
+    private String groupName;
 
     @Override
     public int compareTo(Booking o) {
