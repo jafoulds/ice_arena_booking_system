@@ -1,5 +1,6 @@
 package com.sealteam6.domainmodel;
 
+import com.sealteam6.repository.RinkRepository;
 import lombok.Data;
 import lombok.Value;
 import org.springframework.data.annotation.Id;

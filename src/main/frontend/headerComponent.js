@@ -47,7 +47,7 @@ export class Header extends React.Component {
 		          		</Link>
 			          </div>
 			          <div className="navbar-brand col-2">
-			          	<Link to="/calendar" style={this.state.color}>
+			          	<Link to="/bookrink" style={this.state.color}>
 			          		Bookings
 		          		</Link>
 			          </div>

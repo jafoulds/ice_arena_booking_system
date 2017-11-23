@@ -6,6 +6,7 @@ const API = 'http://localhost:8080/api';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { Header } from './headerComponent';
 import {ProfilePage} from './profilePage';
+import requests from './requests';
 
 exports.API = API;
 
@@ -16,11 +17,15 @@ class App extends React.Component {
         console.log(ProfilePage);
     }
 
+    passCalendar() {
+        return <CalendarComponent getCalendar={requests.getCalendar} />
+    }
+
     render() {
         return (
             <div>
                 <Header />
-                <Route exact path='/calendar' component={CalendarComponent} />
+                <Route exact path='/bookrink' render={this.passCalendar} />
                 <Route exact path='/temp' component={Temp} />
                 <Route path='/' component={ProfilePage} />
             </div>

@@ -21,7 +21,7 @@ export class CalendarComponent extends React.Component {
     }
 
     getTimeSlots(date) {
-        requests.getCalendar(date, (result) => {
+        this.props.getCalendar(date, (result) => {
             this.setState({calendar: result});
             let timeslots = [];
             this.state.calendar.days.forEach((day) => {

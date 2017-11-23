@@ -8,12 +8,22 @@ module.exports = {
 	getCalendar: (date, callback) => {
 		fetch(API + "/getCalendar?" + getYearAndMonthArgs(date), {credentials: 'same-origin'})
             .then(result => {
-            	console.log(result);
                 return result.json();
             }).then(result => {
             	callback(result)
             }
     	);
+    },
+
+    getCalendarForUser: (date, callback) => {
+        fetch(API + "/getCalendarForUser?" + getYearAndMonthArgs(date), {credentials: 'same-origin'})
+            .then(result => {
+                return result.json();
+            }).then(result => {
+                console.log(result);
+                callback(result)
+            }
+        );
     },
 
     createGroup: (groupName, callback) => {
