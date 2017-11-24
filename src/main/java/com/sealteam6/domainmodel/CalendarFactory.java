@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class CalendarFactory {
@@ -32,7 +33,22 @@ public class CalendarFactory {
         this.arenaScheduleService = arenaScheduleService;
     }
 
-    public Calendar createCalendar(int month, int year) {
+    public Calendar createCalendarForUser(YearMonth yearMonth, User user) {
+        List<Rink> rinks = rinkRepository.findAll();
+        List<Booking> allBookingsForMonth =  getAllBookingsForMonthAndYear(yearMonth);
+        allBookingsForMonth = allBookingsForMonth.stream()
+                .filter(booking -> user.isInGroup(booking.getGroupName()))
+                .collect(Collectors.toList());
+
+        List<List<Booking>> bookingsByDay = separateByDay(allBookingsForMonth, yearMonth.lengthOfMonth());
+        List<CalendarDay> calendarDays = bookingsByDay.stream()
+                .map(this::bookingsToCalendarDay)
+                .collect(Collectors.toList());
+        Collections.sort(calendarDays);
+        return new Calendar(calendarDays, yearMonth);
+    }
+
+    public Calendar createCalendarOfAvailableTimeSlots(int month, int year) {
         List<Rink> rinks = rinkRepository.findAll();
         YearMonth yearMonth = YearMonth.of(year, month);
 
@@ -46,13 +62,28 @@ public class CalendarFactory {
             LocalTime closingTime = arenaScheduleService.getClosingTime(currentDate);
 
             List<TimeSlot> timeSlots = getAvailableTimeSlots(
-                    bookingsByDay.get(currentDate.getDayOfMonth()), openingTime, closingTime, rinks);
+                    bookingsByDay.get(currentDate.getDayOfMonth()-1), openingTime, closingTime, rinks);
             calendarDays.add(new CalendarDay(
                     LocalDate.of(currentDate.getYear(), currentDate.getMonth(), currentDate.getDayOfMonth()), timeSlots));
 
             currentDate = currentDate.plusDays(1);
         }
         return new Calendar(calendarDays, yearMonth);
+    }
+
+    private CalendarDay bookingsToCalendarDay(List<Booking> bookings) {
+        if (bookings.size() == 0) {
+            return new CalendarDay(LocalDate.now(), Collections.emptyList());
+        }
+        LocalDate date = bookings.get(0).getStartDate().toLocalDate();
+        List<TimeSlot> timeSlots = bookings.stream()
+                .map(booking -> {
+                    return new TimeSlot(booking.getStartDate().toLocalTime(),
+                            booking.getEndDate().toLocalTime(),
+                            booking.getRink());
+                }).collect(Collectors.toList());
+
+        return new CalendarDay(date, timeSlots);
     }
 
     private List<TimeSlot> getAvailableTimeSlots(List<Booking> bookings, LocalTime openingTime,
@@ -96,11 +127,11 @@ public class CalendarFactory {
 
     private List<List<Booking>> separateByDay(List<Booking> bookings, int lengthOfMonth) {
         List<List<Booking>> bookingsByDay = new ArrayList<>();
-        for (int i = 0; i <= lengthOfMonth; i++) {
+        for (int i = 0; i < lengthOfMonth; i++) {
             bookingsByDay.add(new ArrayList<>());
         }
         for (Booking booking : bookings) {
-            bookingsByDay.get(booking.getStartDate().getDayOfMonth()).add(booking);
+            bookingsByDay.get(booking.getStartDate().getDayOfMonth()-1).add(booking);
         }
         return bookingsByDay;
 

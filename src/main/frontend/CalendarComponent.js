@@ -21,7 +21,7 @@ export class CalendarComponent extends React.Component {
     }
 
     getTimeSlots(date) {
-        requests.getCalendar(date, (result) => {
+        this.props.getCalendar(date, (result) => {
             this.setState({calendar: result});
             let timeslots = [];
             this.state.calendar.days.forEach((day) => {
@@ -92,17 +92,15 @@ export class CalendarComponent extends React.Component {
                     contentLabel="Modal"
                     style={{
                         overlay: {
-                            zIndex : 1000,
-                            width : 500
+                            zIndex : 1000
                         }
                     }}
-                >           
-                    <CreateBookingComponent 
+                >
+                    <CreateBookingComponent
                         start={this.state.start}
                         end={this.state.end}
                         rink={this.state.rink}
-                        // id={this.state.id}
-                        id = "5a150cf9d7fc0418f562fa08"
+                        id={this.state.id}
                         isCreate={this.state.isCreate}
                     />
                 </Modal>
