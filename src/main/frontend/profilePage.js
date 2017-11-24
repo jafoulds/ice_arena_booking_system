@@ -23,7 +23,9 @@ export class ProfilePage extends React.Component {
 				<Route exact path='/profile/schedule' component={Schedule} />
 				<Route exact path='/profile/createGroup' component={CreateGroup} />
 			  </div>
-			</div>
+			<div>
+			
+
 		);
 	}
 

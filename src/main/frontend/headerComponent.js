@@ -58,10 +58,37 @@ export class Header extends React.Component {
 				  	<HeaderElement route='/' text='Company Name' />
 				  </div>
 				  <div className="col-6">
+
 				  	<div className='row justify-content-end'>
 			          {this.state.elements}
 		          	</div>
-		          </div>
+
+			          <div className="navbar-brand col-2">
+			          	<Link to="/" style={this.state.color}>
+			          		Home
+		          		</Link>
+			          </div>
+			          <div className="navbar-brand col-2">
+			          	<Link to="profile" style={this.state.color}>
+			          		Login
+		          		</Link>
+			          </div>
+	  		          <div className="navbar-brand col-2">
+			          	<Link to="/profile" style={this.state.color}>
+			          		Profile
+		          		</Link>
+			          </div>
+			          <div className="navbar-brand col-2">
+			          	<Link to="/group" style={this.state.color}>
+			          		Groups
+		          		</Link>
+			          </div>
+			          <div className="navbar-brand col-2">
+			          	<Link to="/bookrink" style={this.state.color}>
+			          		Bookings
+		          		</Link>
+			          </div>
+				 </div>
   		    </nav>
 		);
 	}
