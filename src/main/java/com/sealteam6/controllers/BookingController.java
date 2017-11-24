@@ -1,13 +1,9 @@
 package com.sealteam6.controllers;
 
-import org.springframework.stereotype.Controller;
-
 import com.sealteam6.domainmodel.Booking;
-
 import com.sealteam6.repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,8 +16,15 @@ public class BookingController {
     // add a new booking
     @RequestMapping(value = "/api/addBooking", method=RequestMethod.POST, consumes="application/json")
     @ResponseBody
-    public void addBooking(@RequestBody Booking booking) {
+    public String addBooking(@RequestBody Booking booking) {
         bookingRepository.save(booking);
+        return "redirect:/";
+    }
+
+    // Success
+    @RequestMapping(value="reservation/reservationSuccess", method = RequestMethod.GET)
+    public String getSuccess() {
+        return "reservation/reservationForm";
     }
 
     // get booking by id
@@ -31,8 +34,8 @@ public class BookingController {
     }
 
     // show all bookings
-    @RequestMapping(value = "/api/showBookings", method=RequestMethod.GET)
-    public List<Booking> showBookings(String id) {
+    @RequestMapping(value = "/api/getBookings", method=RequestMethod.GET)
+    public List<Booking> getBookings(String id) {
         return bookingRepository.findAll();
     }
 

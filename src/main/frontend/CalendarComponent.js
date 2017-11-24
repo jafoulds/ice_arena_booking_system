@@ -101,6 +101,9 @@ export class CalendarComponent extends React.Component {
                         start={this.state.start}
                         end={this.state.end}
                         rink={this.state.rink}
+                        // id={this.state.id}
+                        id = "5a150cf9d7fc0418f562fa08"
+                        isCreate={this.state.isCreate}
                     />
                 </Modal>
             </div>

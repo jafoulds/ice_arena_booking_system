@@ -15,23 +15,17 @@ module.exports = {
     	);
     },
 
-    addBooking: (e, start, end, rink) =>{
+    addOrRemoveBooking: (e, uri, request) =>{
         e.preventDefault();
         fetch(
-            API + '/addBooking', {
-            credentials: 'same-origin',
+            API + uri, {
             method: 'post',
+            credentials: 'same-origin',
             headers: {
-                 'Accept': 'application/json',
-                 'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        "startDate":start.toJSON(),
-                        "endDate":end.toJSON(),
-                        "rink":rink,
-                        "groupName":"1",
-                        "usernameOfBooker":"fake_user"
-                })
+                 'Accept':'application/json',
+                 'Content-Type':'application/json',
+            },
+            body: request,
         })
         .then(function (data) {
           console.log('Request success: ', data);
@@ -40,28 +34,5 @@ module.exports = {
           console.log('Request failure: ', error);
         });
 
-    },
-
-        cancelBooking: (e, id) =>{
-            e.preventDefault();
-            fetch(
-                API + '/cancelBooking', {
-                credentials: 'same-origin',
-                method: 'post',
-                headers: {
-                 'Accept': 'application/json',
-                 'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        "id":id,
-                })
-            })
-            .then(function (data) {
-              console.log('Request success: ', data);
-            })
-            .catch(function (error) {
-              console.log('Request failure: ', error);
-            });
-
-        }
+    }
 }

@@ -1,6 +1,6 @@
 package com.sealteam6.domainmodel;
 
-import com.sealteam6.service.BookingService;
+import com.sealteam6.service.BookingDeserializer;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import com.sealteam6.repository.RinkRepository;
@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.time.LocalDateTime;
 
 @Data
-@JsonDeserialize(using = BookingService.class)
+@JsonDeserialize(using = BookingDeserializer.class)
 public class Booking implements Comparable<Booking> {
 
     @Id

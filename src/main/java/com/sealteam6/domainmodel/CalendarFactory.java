@@ -58,16 +58,17 @@ public class CalendarFactory {
     private List<TimeSlot> getAvailableTimeSlots(List<Booking> bookings, LocalTime openingTime,
                                                  LocalTime closingTime, List<Rink> rinks) {
 
-        Map<String, List<Booking>> bookingsByRink = new HashMap<>();
+        Map<Rink, List<Booking>> bookingsByRink = new HashMap<>();
         for (Rink rink : rinks) {
-            List<Booking> bookingList = bookingRepository.findByRink(rink);
-            bookingsByRink.put(rink.getId(), bookingList);
+            bookingsByRink.put(rink, new ArrayList<>());
         }
-
+        for (Booking booking : bookings) {
+            bookingsByRink.get(booking.getRink()).add(booking);
+        }
         List<TimeSlot> availableTimeSlots = new ArrayList<>();
         for (Rink rink : rinks) {
             availableTimeSlots.addAll(getAvailableTimeSlotsForRink(
-                    bookingsByRink.get(rink.getId()), openingTime, closingTime, rink));
+                    bookingsByRink.get(rink), openingTime, closingTime, rink));
         }
         return availableTimeSlots;
     }

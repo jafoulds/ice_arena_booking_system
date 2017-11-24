@@ -1,43 +1,46 @@
 import React from 'react';
 import requests from './requests';
-import {CalendarComponent} from './CalendarComponent';
 import Modal from 'react-modal';
-const API = 'http://localhost:8080/api';
+import {CalendarComponent} from './CalendarComponent';
+
 
 export class CreateBookingComponent extends React.Component {
 
         constructor(props) {
         	super(props);
             this.state = {
-                showBooking: true
+                // isCreate: this.props.isCreate;
+                isCreate : true
             };
         }
 
         render() {
-           return (
-                 <div id="booking">
-                        <table><tbody>
-                            <tr>
-                                <th>Start Time:</th>
-                                <td>{this.props.start.toLocaleString()}</td>
-                            </tr>
-                            <tr>
-                                <th>End Time:</th>
-                                <td>{this.props.end.toLocaleString()}</td>
-                            </tr>
-                            <tr>
-                                <th>Rink:</th>
-                                <td>{this.props.rink}</td>
-                            </tr>
-
-                        </tbody></table>
-                        <div>
-                            <button type="submit" onClick={(e) => requests.addBooking(e, this.props.start, this.props.end, this.props.rink)}>Book This Rink</button>
-                            <button>Cancel</button>
-                        </div>
-                  </div>
-           );
+            const isCreate = this.state.isCreate;
+            const uri = isCreate ? '/addBooking' : '/cancelBooking';
+            const request = isCreate ?
+                JSON.stringify({
+                'startDate':this.props.start.toJSON(),
+                'endDate':this.props.end.toJSON(),
+                'rink':this.props.rink,
+                'groupName':"1",
+                'usernameOfBooker':"fake_user"})
+                :
+                JSON.stringify({"id":id});
+            return (
+                <div>
+                    <BookingInfo start={this.props.start} end={this.props.end} rink={this.props.rink} />
+                    <button onClick={(e) => requests.addOrRemoveBooking(e, uri, request)}>
+                        {isCreate ? 'Book this Rink' : 'Cancel this Booking'}
+                    </button>
+                </div>
+            );
         }
+}
 
-
+function BookingInfo(props) {
+    return (<div>
+        <div>Start Time:</div><div>{props.start.toLocaleString()}</div>
+        <div>End Time:</div><div>{props.end.toLocaleString()}</div>
+        <div>Rink:</div><div>{props.rink}</div>
+    </div>);
 }
