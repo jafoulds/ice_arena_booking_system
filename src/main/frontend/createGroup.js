@@ -1,6 +1,7 @@
 import React from 'react';
 import './styles/bootstrap.min.css';
 import requests from './requests';
+import { Link } from 'react-router-dom';
 
 export class CreateGroup extends React.Component {
 
@@ -19,8 +20,9 @@ export class CreateGroup extends React.Component {
 
 	render() {
 		return (
-			<div>
-				<form onSubmit={this.createGroup}>
+			<div style={{float: 'left'}, {paddingTop: '50px'}}>
+				<h1 style={{paddingLeft: '400px'}}>Please Enter The Group Name</h1>
+				<form onSubmit={this.createGroup} style={{paddingLeft: '530px'}}>
 					<input type="text" value={this.state.groupName} onChange={this.groupNameChange} />
 					<button className='btn btn-primary'>Submit</button>
 				</form>
@@ -32,9 +34,10 @@ export class CreateGroup extends React.Component {
 		e.preventDefault();
 		requests.createGroup(this.state.groupName, (resp)=> {
 			console.log(resp);
+			const {groupName} = this.state;
+			alert(`Created new group: ${groupName}`);
+			this.setState({groupName: ''});
 		});
-
 	}
-
 
 }

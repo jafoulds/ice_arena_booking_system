@@ -15,9 +15,14 @@ export class ProfilePage extends React.Component {
 	render() {
 		return (
 			<div>
+			<div>
 				<ProfileSideBar />
-				<Route exact path='/' component={Schedule} />
 			</div>
+			<div>
+				<Route exact path='/profile/createGroup' component={CreateGroup} />
+			</div>
+			</div>
+
 		);
 	}
 

@@ -27,7 +27,7 @@ class App extends React.Component {
                 <Header />
                 <Route exact path='/bookrink' render={this.passCalendar} />
                 <Route exact path='/temp' component={Temp} />
-                <Route path='/' component={ProfilePage} />
+                <Route path='/profile' component={ProfilePage} />
             </div>
         );
     }
