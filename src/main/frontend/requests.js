@@ -42,10 +42,22 @@ module.exports = {
             }).then(result => {
     			callback(result);
     		});
-
     },
 
-    addOrRemoveBooking: (e, uri, request) =>{
+     getGroupsByOwnerName: (callback) => {
+        fetch(API + "/getGroupsByOwnerName", {credentials: 'same-origin'})
+          .then(result => {
+                return result.json();
+            })
+          .then(result => {
+               callback(result);
+          })
+          .catch(function (error) {
+            console.log('Request failure: ', error);
+          });
+    },
+
+    addOrRemoveBooking: (e, uri, request) => {
         e.preventDefault();
         fetch(
             API + uri, {
@@ -55,7 +67,7 @@ module.exports = {
                  'Accept':'application/json',
                  'Content-Type':'application/json',
             },
-            body: request,
+            body: request
         })
         .then(function (data) {
           console.log('Request success: ', data);
@@ -63,4 +75,5 @@ module.exports = {
         .catch(function (error) {
           console.log('Request failure: ', error);
         });
+      }
 }
