@@ -12,13 +12,14 @@ import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class BookingDeserializer extends JsonDeserializer<Booking> {
 
     @Autowired
-    RinkRepository rinkRepository;
+    private RinkRepository rinkRepository;
 
 
     @Override
@@ -31,9 +32,10 @@ public class BookingDeserializer extends JsonDeserializer<Booking> {
         LocalDateTime startDate = LocalDateTime.parse(node.get("startDate").asText(), formatter);
         LocalDateTime endDate = LocalDateTime.parse(node.get("endDate").asText(), formatter);
 
-        Rink rink = rinkRepository.findOne(node.get("rink").asText());
+        // Get current user as group owner
+        String usernameOfBooker = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        String usernameOfBooker = node.get("usernameOfBooker").asText();
+        Rink rink = rinkRepository.findOne(node.get("rink").asText());
         String groupName = node.get("groupName").asText();
 
         return new Booking(startDate, endDate, rink, usernameOfBooker, groupName);

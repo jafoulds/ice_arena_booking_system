@@ -30,12 +30,12 @@ public class Booking implements Comparable<Booking> {
 
     public Booking() {}
 
-    public Booking(LocalDateTime startDate, LocalDateTime endDate, Rink rink, String usernameOfBooker, String groupName) {
+    public Booking(LocalDateTime startDate, LocalDateTime endDate, Rink rink, String usernameOfBooker, String group) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.rink = rink;
         this.usernameOfBooker = usernameOfBooker;
-        this.groupName = groupName;
+        this.groupName = group;
     }
 
 }

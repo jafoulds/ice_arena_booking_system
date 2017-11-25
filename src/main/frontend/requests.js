@@ -57,17 +57,21 @@ module.exports = {
           });
     },
 
-    addOrRemoveBooking: (e, uri, request) => {
-        e.preventDefault();
+    addBooking: (start, end, rink, group) => {
         fetch(
-            API + uri, {
+            API + '/addBooking', {
             method: 'post',
             credentials: 'same-origin',
             headers: {
                  'Accept':'application/json',
                  'Content-Type':'application/json',
             },
-            body: request
+            body: JSON.stringify({
+                'startDate': start,
+                'endDate': end,
+                'rink': rink,
+                'groupName': group
+            })
         })
         .then(function (data) {
           console.log('Request success: ', data);
