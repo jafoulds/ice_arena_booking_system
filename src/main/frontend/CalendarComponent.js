@@ -20,6 +20,7 @@ export class CalendarComponent extends React.Component {
             showModal:false
         };
         this.closeModal = this.closeModal.bind(this);
+        this.getTimeSlots = this.getTimeSlots.bind(this);
     }
     componentDidMount() {
         this.getTimeSlots(new Date());
@@ -113,6 +114,7 @@ export class CalendarComponent extends React.Component {
                         end={this.state.end}
                         rink={this.state.rink}
                         closeModal={this.closeModal}
+                        updateCalendar={this.getTimeSlots}
                     />
 
                 </Modal>

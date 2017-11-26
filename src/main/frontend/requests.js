@@ -66,7 +66,7 @@ module.exports = {
              });
     },
 
-    addBooking: (start, end, rink, group, callback) => {
+    addBooking: (body, callback) => {
         fetch(
             API + '/addBooking', {
             method: 'post',
@@ -75,18 +75,13 @@ module.exports = {
                  'Accept':'application/json',
                  'Content-Type':'application/json',
             },
-            body: JSON.stringify({
-                'startDate': start,
-                'endDate': end,
-                'rink': rink,
-                'groupName': group
-            })
+            body: JSON.stringify( body )
         })
         .catch(function (error) {
             console.log('Request failure: ', error);
           })
         .then(result => {
-           callback(result)
+           callback(body.startDate, result)
          });
       },
 

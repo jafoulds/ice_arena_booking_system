@@ -59,6 +59,16 @@ export class CreateBookingComponent extends React.Component {
              else {return true};
          }
 
+         getSuccessMessage() {
+            if (this.state.bookingCreationSucceeded) {
+                return <p className='text-success'>Booking created successfully!</p>
+            } else if (this.state.bookingCreationSucceeded === false) {
+                return <p className='text-danger'>Booking could not be created</p>    
+            }
+            return "";
+            
+         }
+
         render() {
             const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
@@ -88,20 +98,26 @@ export class CreateBookingComponent extends React.Component {
                     <div>Total Hours:</div><div>{this.state.hours}</div>
                     <div>{this.state.msg}</div>
                     <button type="submit" className='btn btn-primary'>Book this Rink</button>
-                    <div className='btn btn-warning' onClick={this.props.closeModal}>Cancel</div>
+                    <div className='btn btn-secondary' onClick={this.props.closeModal}>Cancel</div>
                    </form>
+                {this.getSuccessMessage()}
                 </div>
             );
         }
         createBooking(e) {
             e.preventDefault();
-            console.log(this.state);
             if (this.validateForm()) {
-            requests.addBooking(this.state.start, this.state.end, this.props.rink,
-                this.state.selectedGroup, (resp)=> {console.log(resp);});
-            this.props.closeModal();
+            let body = {
+                'startDate': this.state.start,
+                'endDate': this.state.end,
+                'rink': this.props.rink,
+                'groupName': this.state.selectedGroup
+            }
+            requests.addBooking(body, (date, resp) => {
+                    this.setState({bookingCreationSucceeded: resp.ok})
+                    this.props.updateCalendar(date);        
+                });
+            
             }
         }
-
-
 }
