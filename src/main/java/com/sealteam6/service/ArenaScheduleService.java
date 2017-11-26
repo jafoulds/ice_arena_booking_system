@@ -28,6 +28,6 @@ public class ArenaScheduleService {
      * @return the length of an increment for booking scheduling.
      */
     public static int getIncrementInMinutes() {
-        return 30;
+        return 60;
     }
 }
