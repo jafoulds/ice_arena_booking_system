@@ -21,16 +21,15 @@ public class BookingDeserializer extends JsonDeserializer<Booking> {
     @Autowired
     private RinkRepository rinkRepository;
 
-
     @Override
     public Booking deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         ObjectCodec oc = jsonParser.getCodec();
         JsonNode node = oc.readTree(jsonParser);
 
-        // Convert dates
+        // Convert dates (BAD FIX: -8 hours to adjust for timezone difference
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        LocalDateTime startDate = LocalDateTime.parse(node.get("startDate").asText(), formatter);
-        LocalDateTime endDate = LocalDateTime.parse(node.get("endDate").asText(), formatter);
+        LocalDateTime startDate = LocalDateTime.parse(node.get("startDate").asText(), formatter).plusHours(-8);;
+        LocalDateTime endDate = LocalDateTime.parse(node.get("endDate").asText(), formatter).plusHours(-8);
 
         // Get current user as group owner
         String usernameOfBooker = SecurityContextHolder.getContext().getAuthentication().getName();

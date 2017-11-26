@@ -57,7 +57,16 @@ module.exports = {
           });
     },
 
-    addBooking: (start, end, rink, group) => {
+    getBooking: (id, callback) => {
+        fetch(API + "/getBooking?id=" + id, {credentials: 'same-origin'})
+             .then(result => {
+                 return result.json();
+             }).then(result => {
+                callback(result)
+             });
+    },
+
+    addBooking: (start, end, rink, group, callback) => {
         fetch(
             API + '/addBooking', {
             method: 'post',
@@ -73,11 +82,24 @@ module.exports = {
                 'groupName': group
             })
         })
-        .then(function (data) {
-          console.log('Request success: ', data);
-        })
         .catch(function (error) {
-          console.log('Request failure: ', error);
-        });
+            console.log('Request failure: ', error);
+          })
+        .then(result => {
+           callback(result)
+         });
+      },
+
+      cancelBooking: (id, callback) => {
+           fetch(API + "/cancelBooking?id=" + id, {credentials: 'same-origin'})
+              .then(result => {
+                    return result.json();
+                 })
+                 .catch(function (error) {
+                    console.log('Request failure: ', error);
+                  })
+                .then(result => {
+                    callback(result)
+                });
       }
 }

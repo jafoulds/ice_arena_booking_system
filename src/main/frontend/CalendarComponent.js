@@ -4,6 +4,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import requests from './requests';
 import {CreateBookingComponent} from './CreateBookingComponent';
+import {CancelBookingComponent} from './CancelBookingComponent';
 import Modal from 'react-modal';
 
 BigCalendar.setLocalizer(
@@ -14,7 +15,11 @@ export class CalendarComponent extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {calendar: []};
+        this.state = {
+            calendar: [],
+            showModal:false
+        };
+        this.closeModal = this.closeModal.bind(this);
     }
     componentDidMount() {
         this.getTimeSlots(new Date());
@@ -71,6 +76,11 @@ export class CalendarComponent extends React.Component {
         });
     }
 
+    closeModal () {
+        this.setState({ isCreateBookingModalOpen: false });
+        console.log(this.state);
+    }
+
     render() {
         if (this.state.calendar.month && this.state.timeslots) {
             return (
@@ -90,17 +100,21 @@ export class CalendarComponent extends React.Component {
                 <Modal
                     isOpen={this.state.isCreateBookingModalOpen}
                     contentLabel="Modal"
+                    onRequestClose={this.closeModal}
                     style={{
                         overlay: {
-                            zIndex : 1000
+                            zIndex : 1000,
                         }
                     }}
                 >
+
                     <CreateBookingComponent
                         start={this.state.start}
                         end={this.state.end}
                         rink={this.state.rink}
+                        closeModal={this.closeModal}
                     />
+
                 </Modal>
             </div>
 

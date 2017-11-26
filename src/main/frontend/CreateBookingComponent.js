@@ -6,25 +6,7 @@ import Slider from 'rc-slider';
 import Tooltip from 'rc-tooltip';
 import 'rc-slider/assets/index.css';
 
-const createSliderWithTooltip = Slider.createSliderWithTooltip;
-const Range = createSliderWithTooltip(Slider.Range);
-const Handle = Slider.Handle;
-
-const handle = (props) => {
-  const { value, dragging, index} = props;
-  return (
-    <Tooltip
-      prefixCls="rc-slider-tooltip"
-      overlay={value}
-      visible={dragging}
-      placement="top"
-      key={index}
-    >
-      <Handle value={value} />
-    </Tooltip>
-  );
-};
-
+const Range = Slider.Range;
 
 export class CreateBookingComponent extends React.Component {
 
@@ -33,16 +15,18 @@ export class CreateBookingComponent extends React.Component {
         	this.timeSlot = Math.round((this.props.end.getTime() - this.props.start.getTime())/(1000*60*60));
             this.state = {
                 groups : [],
-                selectedGroup: '',
+                selectedGroup: null,
                 value: [0, this.timeSlot],
                 start: this.props.start,
+                hours: this.timeSlot,
                 end: this.props.end,
-                rink: this.props.rink
+                rink: this.props.rink,
+                msg: ''
             };
 
             this.updateBookingTime = this.updateBookingTime.bind(this);
             this.createBooking = this.createBooking.bind(this);
-            this.handleChange = this.handleChange.bind(this);
+            this.validateForm = this.validateForm.bind(this);
         }
 
         componentDidMount() {
@@ -58,16 +42,24 @@ export class CreateBookingComponent extends React.Component {
             this.setState({value});
             this.setState({
                 start: new Date(this.props.start.getTime() + value[0]*1000*60*60),
-                end: new Date(this.props.start.getTime() + value[1]*1000*60*60)
+                end: new Date(this.props.start.getTime() + value[1]*1000*60*60),
+                hours: value[1] - value[0]
             });
         }
 
-        handleChange(e) {
-            this.setState({selectedGroup:e.target.value});
-        }
+        validateForm() {
+             if (this.state.selectedGroup == null) {
+                 this.setState({msg: "A group must be selected before booking."});
+                 return false;
+             }
+             else if (this.state.hours==0) {
+                 this.setState({msg: "Booking is for 0 hours!"});
+                  return false;
+             }
+             else {return true};
+         }
 
         render() {
-            const uri = '/addBooking';
             const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
             return (
@@ -75,33 +67,41 @@ export class CreateBookingComponent extends React.Component {
                 <h4>Booking for Rink #{this.props.rink}</h4>
                 <h5>Date: {this.props.start.toLocaleDateString('en-US', dateOptions)}</h5>
                 <form onSubmit={this.createBooking}>
-                    <div>Select a Group</div>
-                    <select value={this.state.selectedGroup} onChange={this.handleChange}>
+                    <div>For Group:</div>
+                    <select
+                        value={this.state.selectedGroup || ''}
+                        onChange={(e) => this.setState({selectedGroup:e.target.value || null})}>
+                        <option key={0} value={''}>Select a group...</option>
                         {this.state.groups.map(group => {
                             return <option key={group.id} value={group.groupName}>{group.groupName}</option>})}
                     </select>
-                    <div>Select the Length of Booking (Hours):</div>
+                    <div>Select the Start and End Times of your Booking (Hours):</div>
                     <Range
                         max={this.timeSlot}
                         allowCross={false} dots
                         step={1}
                         defaultValue={this.state.value}
-                        tipFormatter={value => '${value}Hours'}
                         onChange={this.updateBookingTime}
-
                        />
                     <div>From:</div><div>{this.state.start.toLocaleString()}</div>
                     <div>To:</div><div>{this.state.end.toLocaleString()}</div>
-                    <button className='btn btn-primary'>Book this Rink</button>
+                    <div>Total Hours:</div><div>{this.state.hours}</div>
+                    <div>{this.state.msg}</div>
+                    <button type="submit" className='btn btn-primary'>Book this Rink</button>
+                    <div className='btn btn-warning' onClick={this.props.closeModal}>Cancel</div>
                    </form>
                 </div>
             );
         }
         createBooking(e) {
             e.preventDefault();
-            requests.addBooking(this.state.start, this.state.end, this.props.rink, this.state.selectedGroup, (resp)=> {
-                console.log(resp);
-            });
+            console.log(this.state);
+            if (this.validateForm()) {
+            requests.addBooking(this.state.start, this.state.end, this.props.rink,
+                this.state.selectedGroup, (resp)=> {console.log(resp);});
+            this.props.closeModal();
+            }
         }
+
 
 }
