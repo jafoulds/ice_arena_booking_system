@@ -9,7 +9,10 @@ export class Schedule extends React.Component {
 
 	render() {
 		return (
-			<CalendarComponent getCalendar={ requests.getCalendarForUser } />
+			<CalendarComponent 
+				getCalendar={ requests.getCalendarForUser } 
+				isCreateModal={ false }
+			/>
 		);
 	}
 

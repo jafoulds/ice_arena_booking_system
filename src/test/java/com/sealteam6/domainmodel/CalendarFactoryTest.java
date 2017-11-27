@@ -3,6 +3,7 @@ package com.sealteam6.domainmodel;
 import com.sealteam6.repository.BookingRepository;
 import com.sealteam6.repository.RinkRepository;
 import com.sealteam6.service.ArenaScheduleService;
+import com.sealteam6.service.GroupService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,6 +37,11 @@ public class CalendarFactoryTest {
     @MockBean
     private ArenaScheduleService arenaScheduleService;
 
+    @MockBean
+    private GroupService groupService;
+
+    private CalendarFactory factory;
+
     private final String USERNAME = "fake_user";
     private final String GROUPNAME = "fake_group";
     private final String GROUPNAME1 = "fake_group1";
@@ -48,6 +54,12 @@ public class CalendarFactoryTest {
         when(rinkRepository.findAll()).thenReturn(allRinks);
         when(arenaScheduleService.getOpeningTime(any(LocalDate.class))).thenReturn(LocalTime.of(5, 0));
         when(arenaScheduleService.getClosingTime(any(LocalDate.class))).thenReturn(LocalTime.of(20, 0));
+        factory = CalendarFactory.builder()
+                .bookingRepository(bookingRepository)
+                .rinkRepository(rinkRepository)
+                .arenaScheduleService(arenaScheduleService)
+                .groupService(groupService)
+                .build();
     }
 
     @Test
@@ -60,16 +72,20 @@ public class CalendarFactoryTest {
         List<Booking> bookings = new ArrayList<>();
         LocalDateTime startDate = LocalDateTime.of(date, openingTime);
         LocalDateTime endDate = LocalDateTime.of(date, closingTime);
-        bookings.add(new Booking(startDate, endDate, rinks.get(0), USERNAME, GROUPNAME));
+        bookings.add(Booking.builder()
+            .startDate(startDate)
+            .endDate(endDate)
+            .rink(rinks.get(0))
+            .usernameOfBooker(USERNAME)
+            .groupName(GROUPNAME)
+            .id(GROUPNAME)
+            .build());
         when(bookingRepository.findByDateBetween(any(LocalDateTime.class), any(LocalDateTime.class)))
                 .thenReturn(bookings);
 
-        CalendarFactory factory = new CalendarFactory(bookingRepository, rinkRepository, arenaScheduleService);
+        when(groupService.userIsInGroup(USERNAME, GROUPNAME)).thenReturn(true);
         List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
         User user = new User(USERNAME, "pass", "email", grantedAuthorities);
-        List<String> groups = new ArrayList<>();
-        groups.add(GROUPNAME);
-        user.setGroups(groups);
         Calendar calendar = factory.createCalendarForUser(yearMonth, user);
 
         assertThat(calendar.getDays().size(), is(yearMonth.lengthOfMonth()));
@@ -92,16 +108,13 @@ public class CalendarFactoryTest {
         List<Booking> bookings = new ArrayList<>();
         LocalDateTime startDate = LocalDateTime.of(date, openingTime);
         LocalDateTime endDate = LocalDateTime.of(date, closingTime);
-        bookings.add(new Booking(startDate, endDate, rinks.get(0), USERNAME, GROUPNAME1));
+        bookings.add(createBooking(startDate, endDate, rinks.get(0), USERNAME, GROUPNAME1));
         when(bookingRepository.findByDateBetween(any(LocalDateTime.class), any(LocalDateTime.class)))
                 .thenReturn(bookings);
 
-        CalendarFactory factory = new CalendarFactory(bookingRepository, rinkRepository, arenaScheduleService);
+        when(groupService.userIsInGroup(USERNAME, GROUPNAME)).thenReturn(false);
         List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
         User user = new User(USERNAME, "pass", "email", grantedAuthorities);
-        List<String> groups = new ArrayList<>();
-        groups.add(GROUPNAME);
-        user.setGroups(groups);
         Calendar calendar = factory.createCalendarForUser(yearMonth, user);
 
         assertThat(calendar.getDays().size(), is(yearMonth.lengthOfMonth()));
@@ -117,7 +130,6 @@ public class CalendarFactoryTest {
                 .thenReturn(Collections.emptyList());
         List<Rink> rinks = rinkRepository.findAll();
 
-        CalendarFactory factory = new CalendarFactory(bookingRepository, rinkRepository, arenaScheduleService);
         YearMonth yearMonth = YearMonth.of(2000, 1);
         Calendar calendar = factory.createCalendarOfAvailableTimeSlots(yearMonth.getMonthValue(), yearMonth.getYear());
 
@@ -139,11 +151,10 @@ public class CalendarFactoryTest {
         List<Booking> bookings = new ArrayList<>();
         LocalDateTime startDate = LocalDateTime.of(date, arenaScheduleService.getOpeningTime(date));
         LocalDateTime endDate= LocalDateTime.of(date, arenaScheduleService.getClosingTime(date));
-        bookings.add(new Booking(startDate, endDate, rinks.get(0), USERNAME, GROUPNAME));
+        bookings.add(createBooking(startDate, endDate, rinks.get(0), USERNAME, GROUPNAME));
         when(bookingRepository.findByDateBetween(any(LocalDateTime.class), any(LocalDateTime.class)))
                 .thenReturn(bookings);
 
-        CalendarFactory factory = new CalendarFactory(bookingRepository, rinkRepository, arenaScheduleService);
         Calendar calendar = factory.createCalendarOfAvailableTimeSlots(yearMonth.getMonthValue(), yearMonth.getYear());
 
         assertThat(calendar.getDays().size(), is(yearMonth.lengthOfMonth()));
@@ -155,6 +166,17 @@ public class CalendarFactoryTest {
         assertThat(timeSlot.getStartTime(), is(arenaScheduleService.getOpeningTime(yearMonth.atDay(1))));
         assertThat(timeSlot.getEndTime(), is(arenaScheduleService.getClosingTime(yearMonth.atDay(1))));
         assertThat(timeSlot.getRink(), is(rinks.get(1)));
+    }
+
+    private Booking createBooking(LocalDateTime startDate, LocalDateTime endDate,
+                                  Rink rink, String username, String groupname) {
+        return Booking.builder()
+                .startDate(startDate)
+                .endDate(endDate)
+                .rink(rink)
+                .usernameOfBooker(username)
+                .groupName(groupname)
+                .build();
     }
 
     @Test
@@ -169,12 +191,11 @@ public class CalendarFactoryTest {
         LocalDateTime endDate1 = LocalDateTime.of(date, closingTime.minusHours(1));
         LocalDateTime startDate2 = LocalDateTime.of(date, openingTime);
         LocalDateTime endDate2 = LocalDateTime.of(date, closingTime);
-        bookings.add(new Booking(startDate1, endDate1, rinks.get(0), USERNAME, GROUPNAME));
-        bookings.add(new Booking(startDate2, endDate2, rinks.get(1), USERNAME, GROUPNAME));
+        bookings.add(createBooking(startDate1, endDate1, rinks.get(0), USERNAME, GROUPNAME));
+        bookings.add(createBooking(startDate2, endDate2, rinks.get(1), USERNAME, GROUPNAME));
         when(bookingRepository.findByDateBetween(any(LocalDateTime.class), any(LocalDateTime.class)))
                 .thenReturn(bookings);
 
-        CalendarFactory factory = new CalendarFactory(bookingRepository, rinkRepository, arenaScheduleService);
         Calendar calendar = factory.createCalendarOfAvailableTimeSlots(yearMonth.getMonthValue(), yearMonth.getYear());
 
         assertThat(calendar.getDays().size(), is(yearMonth.lengthOfMonth()));
@@ -191,4 +212,5 @@ public class CalendarFactoryTest {
         assertThat(timeSlot.getEndTime(), is(closingTime));
 
     }
+
 }

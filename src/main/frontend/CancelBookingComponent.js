@@ -2,6 +2,7 @@ import React from 'react';
 import requests from './requests';
 import {CalendarComponent} from './CalendarComponent';
 import Modal from 'react-modal';
+import dateUtils from './dateUtils';
 
 export class CancelBookingComponent extends React.Component {
 
@@ -11,7 +12,7 @@ export class CancelBookingComponent extends React.Component {
                 group : '',
                 start: new Date(),
                 end: new Date(),
-                rink: '',
+                rink: this.props.rink,
                 msg: ''
             };
             this.cancelBooking = this.cancelBooking.bind(this);
@@ -19,26 +20,25 @@ export class CancelBookingComponent extends React.Component {
 
         componentDidMount() {
             // Get booking to delete
-            requests.getBooking (this.props.id, data => {
+            requests.getBooking(this.props.id, data => {
                 this.setState({
                     group: data.groupName,
                     rink: data.rink.id,
-                    start: new Date(
-                               data.startDate.year,
-                               data.startDate.monthValue-1, //js dates are zero indexed
-                               data.startDate.dayOfMonth,
-                               data.startDate.hour,
-                               data.startDate.minute),
-                    end: new Date(
-                               data.endDate.year,
-                               data.endDate.monthValue-1, //js dates are zero indexed
-                               data.endDate.dayOfMonth,
-                               data.endDate.hour,
-                               data.endDate.minute),
-                    });
-                console.log("booking: ", this.state);
+                    start: dateUtils.convertJsonToJSDate(data.startDate),
+                    end: dateUtils.convertJsonToJSDate(data.endDate)
+                });
             });
         }
+
+        getSuccessMessage() {
+            if (this.state.bookingCreationSucceeded) {
+                return <p className='text-success'>Booking cancelled successfully!</p>
+            } else if (this.state.bookingCreationSucceeded === false) {
+                return <p className='text-danger'>Booking was unable to be cancelled</p>    
+            }
+            return "";
+            
+         }
 
         render() {
             const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -56,19 +56,21 @@ export class CancelBookingComponent extends React.Component {
                             {Math.round((this.state.end.getTime() - this.state.start.getTime())/(1000*60*60))} Hours
                         </div>
                         <div>{this.state.msg}</div>
-                        <button type="submit" className='btn btn-primary'>Delete this Booking</button>
-                        <div className='btn btn-warning' onClick={this.props.closeModal}>Cancel</div>
+                        <button type="submit" className='btn btn-primary'>Cancel Booking</button>
+                        <div className='btn btn-secondary' onClick={this.props.closeModal}>Exit</div>
                      </form>
+                     {this.getSuccessMessage()}
                 </div>
             );
         }
         cancelBooking(e) {
             e.preventDefault();
-            console.log(this.state);
             requests.cancelBooking(this.props.id, (resp)=> {
                 console.log(resp);
+                this.setState({bookingCreationSucceeded: resp.ok})
+                console.log(this.state);
+                this.props.updateCalendar(this.state.start);
             });
-            this.props.closeModal();
         }
 
 }

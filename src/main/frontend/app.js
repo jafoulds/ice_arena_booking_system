@@ -20,7 +20,10 @@ class App extends React.Component {
     }
 
     passCalendar() {
-        return <CalendarComponent getCalendar={requests.getCalendar} />
+        return <CalendarComponent 
+            getCalendar={requests.getCalendar} 
+            isCreateModal={true}
+        />
     }
 
     render() {

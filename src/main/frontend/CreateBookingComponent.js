@@ -98,7 +98,7 @@ export class CreateBookingComponent extends React.Component {
                     <div>Total Hours:</div><div>{this.state.hours}</div>
                     <div>{this.state.msg}</div>
                     <button type="submit" className='btn btn-primary'>Book this Rink</button>
-                    <div className='btn btn-secondary' onClick={this.props.closeModal}>Cancel</div>
+                    <div className='btn btn-secondary' onClick={this.props.closeModal}>Exit</div>
                    </form>
                 {this.getSuccessMessage()}
                 </div>
