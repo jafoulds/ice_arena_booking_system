@@ -32,7 +32,7 @@ export class Header extends React.Component {
 		          		</Link>
 			          </div>
 			          <div className="navbar-brand col-2">
-			          	<Link to="profile" style={this.state.color}>
+			          	<Link to="/login" style={this.state.color}>
 			          		Login
 		          		</Link>
 			          </div>

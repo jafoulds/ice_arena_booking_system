@@ -8,8 +8,8 @@ import { Header } from './headerComponent';
 import {ProfilePage} from './profilePage';
 import requests from './requests';
 
-exports.API = API;
 
+exports.API = API;
 class App extends React.Component {
 
     constructor(props) {

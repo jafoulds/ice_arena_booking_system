@@ -2,6 +2,8 @@ package com.sealteam6.controllers;
 
 
 import com.sealteam6.domainmodel.Group;
+import com.sealteam6.domainmodel.GroupMember;
+import com.sealteam6.domainmodel.GroupPermission;
 import com.sealteam6.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,8 +35,17 @@ public class GroupController {
     public HttpStatus createGroup(@RequestParam String groupName) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        List<String> groupMembers = new ArrayList<>();
-        groupMembers.add(username);
+        List<GroupMember> groupMembers = new ArrayList<>();
+        //code taken from group.java -> could be redundant and changed to be somewhere else
+        List<GroupPermission> permissions = new ArrayList<GroupPermission>();
+        permissions.add(GroupPermission.STANDARD_USER);
+        permissions.add(GroupPermission.MAKE_BOOKING);
+        permissions.add(GroupPermission.ADD_USER);
+        permissions.add(GroupPermission.REMOVE_USER);
+        permissions.add(GroupPermission.MAKE_PAYMENT);
+        GroupMember buddy = new GroupMember(username, permissions);
+
+        groupMembers.add(buddy); //need to change this from username into a group member object
 
 
         Group group = Group.builder()
@@ -46,9 +57,15 @@ public class GroupController {
         return HttpStatus.OK;
     }
 
-    @RequestMapping("getGroup")
+    @RequestMapping("/getGroup")
     public Group getGroup(@RequestParam String groupName) {
         return groupRepository.findByGroupName(groupName);
+    }
+
+    @RequestMapping("/getListOfUserGroups")
+    public List<Group> getListOfUserGroups(){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return groupRepository.getListOfUserGroups(username);  
     }
 
 }
