@@ -51,4 +51,11 @@ public class GroupController {
         return groupRepository.findByGroupName(groupName);
     }
 
+    @RequestMapping("getGroupsByOwnerName")
+    public List <Group> getGroupsByOwnerName() {
+        String ownerName = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        return groupRepository.findByOwnerName(ownerName);
+    }
+
 }

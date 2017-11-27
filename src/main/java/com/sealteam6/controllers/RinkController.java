@@ -19,8 +19,8 @@ public class RinkController {
 
 
     @RequestMapping("/api/addRink")
-    public String addRink(@RequestParam String id) {
-        rinkRepository.save(new Rink(id));
+    public String addRink(@RequestParam String number) {
+        rinkRepository.save(new Rink(number));
         return "added rink";
     }
 
@@ -29,4 +29,6 @@ public class RinkController {
         return rinkRepository.findAll();
     }
 
+    @RequestMapping(value = "/api/getRink", method = RequestMethod.GET)
+    public Rink getRink(@RequestParam String id) { return rinkRepository.findOne(id);}
 }

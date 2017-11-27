@@ -42,5 +42,59 @@ module.exports = {
             }).then(result => {
     			callback(result);
     		});
-    }
+    },
+
+     getGroupsByOwnerName: (callback) => {
+        fetch(API + "/getGroupsByOwnerName", {credentials: 'same-origin'})
+          .then(result => {
+                return result.json();
+            })
+          .then(result => {
+               callback(result);
+          })
+          .catch(function (error) {
+            console.log('Request failure: ', error);
+          });
+    },
+
+    getBooking: (id, callback) => {
+        fetch(API + "/getBooking?id=" + id, {credentials: 'same-origin'})
+             .then(result => {
+                 return result.json();
+             }).then(result => {
+                callback(result)
+             });
+    },
+
+    addBooking: (body, callback) => {
+        fetch(
+            API + '/addBooking', {
+            method: 'post',
+            credentials: 'same-origin',
+            headers: {
+                 'Accept':'application/json',
+                 'Content-Type':'application/json',
+            },
+            body: JSON.stringify( body )
+        })
+        .catch(function (error) {
+            console.log('Request failure: ', error);
+          })
+        .then(result => {
+           callback(body.startDate, result)
+         });
+      },
+
+      cancelBooking: (id, callback) => {
+           fetch(API + "/cancelBooking?id=" + id, {credentials: 'same-origin'})
+              .then(result => {
+                    return result.json();
+                 })
+                 .catch(function (error) {
+                    console.log('Request failure: ', error);
+                  })
+                .then(result => {
+                    callback(result)
+                });
+      }
 }

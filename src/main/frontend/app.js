@@ -35,4 +35,3 @@ class App extends React.Component {
 }
 
 ReactDOM.render(<Router><App /></Router>, document.getElementById('react'))
-
