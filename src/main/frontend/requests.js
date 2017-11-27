@@ -118,4 +118,14 @@ module.exports = {
           })
       }
 
+    getListOfUserGroups: (callback) => {
+        fetch(API + '/getListOfUserGroups', {credentials: 'same-origin'})
+            .then(result => {
+                return result.json();
+            }).then(result => {
+                callback(result);
+            });
+
+
+    }
 }

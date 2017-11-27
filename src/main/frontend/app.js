@@ -10,8 +10,8 @@ import requests from './requests';
 import {LoginPage} from './loginPage';
 import './styles/bootstrap.min.css';
 
-exports.API = API;
 
+exports.API = API;
 class App extends React.Component {
 
     constructor(props) {
