@@ -13,9 +13,3 @@ public class GroupMember{
 
 
 }
-/*
-public GroupMember(String username){
-	this.username = username;
-
-}
-*/

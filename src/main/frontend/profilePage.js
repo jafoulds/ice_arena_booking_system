@@ -6,6 +6,7 @@ import {Temp} from './temp';
 import {CreateGroup} from './createGroup';
 import {Schedule} from './schedule';
 import './styles/bootstrap.min.css';
+import {ManageGroups} from './manageGroups';
 
 export class ProfilePage extends React.Component {
 
@@ -22,9 +23,9 @@ export class ProfilePage extends React.Component {
 			  <div className='col-9'>
 				<Route exact path='/profile/schedule' component={Schedule} />
 				<Route exact path='/profile/createGroup' component={CreateGroup} />
-			  </div>
-			<div>
-			
+				<Route exact path='/profile/manageGroups' component={ManageGroups} />
+			</div>
+			</div>
 
 		);
 	}
