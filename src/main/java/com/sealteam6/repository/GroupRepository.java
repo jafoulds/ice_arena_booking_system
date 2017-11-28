@@ -9,6 +9,7 @@ public interface GroupRepository extends MongoRepository<Group, String> {
 
     Group findByGroupName(String groupName);
 
+
     List <Group> findByOwnerName(String ownerName);
 
     @Query("{'groupMembers': {$elemMatch: {'username': ?0 } } }")

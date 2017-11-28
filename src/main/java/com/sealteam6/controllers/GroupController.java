@@ -68,6 +68,7 @@ public class GroupController {
 
         return groupRepository.findByOwnerName(ownerName);
     }
+
     @RequestMapping("/getListOfUserGroups")
     public List<Group> getListOfUserGroups(){
         String username = SecurityContextHolder.getContext().getAuthentication().getName();

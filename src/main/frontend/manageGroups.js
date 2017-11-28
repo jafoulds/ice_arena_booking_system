@@ -14,14 +14,13 @@ import {
 
 
 export default class ManageGroups extends React.Component {
+
 	constructor() {
 		super();
 		this.state = {
 			currGroups : [],
 			someList: []
 		};
-
-
 		this.getGroups = this.getGroups.bind(this)
 	}
 
@@ -31,12 +30,14 @@ export default class ManageGroups extends React.Component {
 
 	getGroups(){
 		requests.getListOfUserGroups(resp=>{
+
 				console.log(resp);
 			this.setState({
 				currGroups: resp
 			});
 		});
 	}
+
 
 
 
@@ -67,7 +68,6 @@ render(){
 
 		);
 	}
-
 
 
 }

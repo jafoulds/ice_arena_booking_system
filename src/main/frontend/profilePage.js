@@ -9,6 +9,7 @@ import './styles/bootstrap.min.css';
 import ManageGroups from './manageGroups';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
+
 export class ProfilePage extends React.Component {
 
 	constructor(props) {
@@ -30,6 +31,7 @@ export class ProfilePage extends React.Component {
 			</div>
 			</div>
 			</MuiThemeProvider>
+
 
 		);
 	}
