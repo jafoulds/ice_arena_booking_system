@@ -47,11 +47,6 @@ public class RegisterController {
         return "redirect:/";
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public String getRegisterPage() {
-        return "register";
-    }
-
     private void authenticateUserAndSetSession(User user, HttpServletRequest request) {
         String username = user.getUsername();
         String password = user.getPassword();

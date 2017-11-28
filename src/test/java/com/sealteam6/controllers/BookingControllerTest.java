@@ -116,6 +116,12 @@ public class BookingControllerTest {
         LocalTime closingTime = arenaScheduleService.getClosingTime(date);
         LocalDateTime startDate = LocalDateTime.of(date, openingTime);
         LocalDateTime endDate = LocalDateTime.of(date, closingTime);
-        return new Booking(startDate, endDate, rinks.get(0), USERNAME, GROUP);
+        return Booking.builder()
+            .startDate(startDate)
+            .endDate(endDate)
+            .rink(rinks.get(0))
+            .usernameOfBooker(USERNAME)
+            .groupName(GROUP)
+            .build();
     }
 }

@@ -1,8 +1,11 @@
 import {API} from './app';
+import dateUtils from './dateUtils';
 
 let getYearAndMonthArgs = (date) => {
 	return 'year=' + date.getFullYear() + '&month=' + (date.getMonth()+1);
 }
+
+
 
 module.exports = {
 	getCalendar: (date, callback) => {
@@ -18,9 +21,10 @@ module.exports = {
     getCalendarForUser: (date, callback) => {
         fetch(API + "/getCalendarForUser?" + getYearAndMonthArgs(date), {credentials: 'same-origin'})
             .then(result => {
+                console.log('json', result);
                 return result.json();
             }).then(result => {
-                console.log(result);
+                console.log('calendar results', result);
                 callback(result)
             }
         );
@@ -38,8 +42,9 @@ module.exports = {
     getCurrentUser: (callback) => {
     	fetch(API + '/getCurrentUser', {credentials: 'same-origin'})
     		.then(result => {
+          console.log(result);
     			return result.json();
-            }).then(result => {
+        }).then(result => {
     			callback(result);
     		});
     },
@@ -67,6 +72,8 @@ module.exports = {
     },
 
     addBooking: (body, callback) => {
+        dateUtils.toLocalTime(body.startDate);
+        dateUtils.toLocalTime(body.endDate);
         fetch(
             API + '/addBooking', {
             method: 'post',
@@ -86,15 +93,29 @@ module.exports = {
       },
 
       cancelBooking: (id, callback) => {
-           fetch(API + "/cancelBooking?id=" + id, {credentials: 'same-origin'})
+          fetch(API + "/cancelBooking?id=" + id, {credentials: 'same-origin'})
+               .catch(function (error) {
+                  console.log('Request failure: ', error);
+                })
               .then(result => {
-                    return result.json();
-                 })
-                 .catch(function (error) {
-                    console.log('Request failure: ', error);
-                  })
-                .then(result => {
-                    callback(result)
-                });
+                  callback(result)
+              });
+      },
+
+      userIsLoggedIn: (callback) => {
+          fetch(API + "/userIsLoggedIn", {credentials: 'same-origin'})
+              .then(result => {
+                  return result.json();
+              }).then(result => {
+                  callback(result)
+              }); 
+      },
+
+      logout: (callback) => {
+        fetch('/logout', {credentials: 'same-origin', method: 'post'})
+          .then(result => {
+            callback(result)
+          })
       }
+
 }

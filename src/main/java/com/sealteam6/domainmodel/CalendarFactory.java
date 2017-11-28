@@ -3,6 +3,9 @@ package com.sealteam6.domainmodel;
 import com.sealteam6.repository.BookingRepository;
 import com.sealteam6.repository.RinkRepository;
 import com.sealteam6.service.ArenaScheduleService;
+import com.sealteam6.service.GroupService;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +14,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
+@Builder
+@AllArgsConstructor
 public class CalendarFactory {
 
 
@@ -23,21 +28,13 @@ public class CalendarFactory {
     private ArenaScheduleService arenaScheduleService;
 
     @Autowired
-    public CalendarFactory(
-            BookingRepository bookingRepository,
-            RinkRepository rinkRepository,
-            ArenaScheduleService arenaScheduleService) {
-
-        this.bookingRepository = bookingRepository;
-        this.rinkRepository = rinkRepository;
-        this.arenaScheduleService = arenaScheduleService;
-    }
+    private GroupService groupService;
 
     public Calendar createCalendarForUser(YearMonth yearMonth, User user) {
         List<Rink> rinks = rinkRepository.findAll();
         List<Booking> allBookingsForMonth =  getAllBookingsForMonthAndYear(yearMonth);
         allBookingsForMonth = allBookingsForMonth.stream()
-                .filter(booking -> user.isInGroup(booking.getGroupName()))
+                .filter(booking -> groupService.userIsInGroup(user.getUsername(), booking.getGroupName()))
                 .collect(Collectors.toList());
 
         List<List<Booking>> bookingsByDay = separateByDay(allBookingsForMonth, yearMonth.lengthOfMonth());
@@ -78,9 +75,12 @@ public class CalendarFactory {
         LocalDate date = bookings.get(0).getStartDate().toLocalDate();
         List<TimeSlot> timeSlots = bookings.stream()
                 .map(booking -> {
-                    return new TimeSlot(booking.getStartDate().toLocalTime(),
-                            booking.getEndDate().toLocalTime(),
-                            booking.getRink());
+                    return TimeSlot.builder()
+                            .startTime(booking.getStartDate().toLocalTime())
+                            .endTime(booking.getEndDate().toLocalTime())
+                            .rink(booking.getRink())
+                            .bookingId(booking.getId())
+                            .build();
                 }).collect(Collectors.toList());
 
         return new CalendarDay(date, timeSlots);
@@ -115,12 +115,20 @@ public class CalendarFactory {
             LocalTime bookingStartTime = booking.getStartDate().toLocalTime();
             LocalTime bookingEndTime = booking.getEndDate().toLocalTime();
             if (!startOfTimeSlot.equals(bookingStartTime)) {
-                availableTimeSlots.add(new TimeSlot(startOfTimeSlot, bookingStartTime, rink));
+                availableTimeSlots.add(TimeSlot.builder()
+                        .startTime(startOfTimeSlot)
+                        .endTime(bookingStartTime)
+                        .rink(rink)
+                        .build());
             }
             startOfTimeSlot = bookingEndTime;
         }
         if (startOfTimeSlot.isBefore(closingTime)) {
-            availableTimeSlots.add(new TimeSlot(startOfTimeSlot, closingTime, rink));
+            availableTimeSlots.add(TimeSlot.builder()
+                .startTime(startOfTimeSlot)
+                .endTime(closingTime)
+                .rink(rink)
+                .build());
         }
         return availableTimeSlots;
     }

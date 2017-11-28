@@ -14,17 +14,9 @@ import java.util.List;
 public class User extends org.springframework.security.core.userdetails.User {
 
     private String emailAddress;
-    private List<String> groups;
 
     public User(String username, String password, String emailAddress, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
         this.emailAddress = emailAddress;
     }
-
-    public boolean isInGroup(String groupName) {
-        return groups.contains(groupName);
-    }
-
-
-
 }

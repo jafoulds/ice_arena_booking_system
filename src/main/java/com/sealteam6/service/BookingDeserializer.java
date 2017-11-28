@@ -8,6 +8,8 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.sealteam6.domainmodel.Booking;
 import com.sealteam6.domainmodel.Rink;
 import com.sealteam6.repository.RinkRepository;
+
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.io.IOException;
@@ -28,8 +30,8 @@ public class BookingDeserializer extends JsonDeserializer<Booking> {
 
         // Convert dates (BAD FIX: -8 hours to adjust for timezone difference
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        LocalDateTime startDate = LocalDateTime.parse(node.get("startDate").asText(), formatter).plusHours(-8);;
-        LocalDateTime endDate = LocalDateTime.parse(node.get("endDate").asText(), formatter).plusHours(-8);
+        LocalDateTime startDate = LocalDateTime.parse(node.get("startDate").asText(), formatter);
+        LocalDateTime endDate = LocalDateTime.parse(node.get("endDate").asText(), formatter);
 
         // Get current user as group owner
         String usernameOfBooker = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -37,6 +39,12 @@ public class BookingDeserializer extends JsonDeserializer<Booking> {
         Rink rink = rinkRepository.findOne(node.get("rink").asText());
         String groupName = node.get("groupName").asText();
 
-        return new Booking(startDate, endDate, rink, usernameOfBooker, groupName);
+        return Booking.builder()
+                .startDate(startDate)
+                .endDate(endDate)
+                .rink(rink)
+                .usernameOfBooker(usernameOfBooker)
+                .groupName(groupName)
+                .build();
     }
 }

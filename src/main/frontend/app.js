@@ -7,6 +7,8 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { Header } from './headerComponent';
 import {ProfilePage} from './profilePage';
 import requests from './requests';
+import {LoginPage} from './loginPage';
+import './styles/bootstrap.min.css';
 
 exports.API = API;
 
@@ -18,16 +20,21 @@ class App extends React.Component {
     }
 
     passCalendar() {
-        return <CalendarComponent getCalendar={requests.getCalendar} />
+        return <CalendarComponent 
+            getCalendar={requests.getCalendar} 
+            isCreateModal={true}
+        />
     }
 
     render() {
         return (
-            <div>
+            <div className='container-fluid'>
                 <Header />
+                <div className='m-4'>
                 <Route exact path='/bookrink' render={this.passCalendar} />
-                <Route exact path='/temp' component={Temp} />
-                <Route path='/' component={ProfilePage} />
+                <Route exact path='/login' component={LoginPage} />
+                <Route path='/profile' component={ProfilePage} />
+                </div>
             </div>
         );
     }

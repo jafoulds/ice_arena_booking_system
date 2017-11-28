@@ -6,6 +6,7 @@ import requests from './requests';
 import {CreateBookingComponent} from './CreateBookingComponent';
 import {CancelBookingComponent} from './CancelBookingComponent';
 import Modal from 'react-modal';
+import dateUtils from './dateUtils';
 
 BigCalendar.setLocalizer(
   BigCalendar.momentLocalizer(moment)
@@ -53,7 +54,8 @@ export class CalendarComponent extends React.Component {
             timeslot.endTime.hour,
             timeslot.endTime.minute);
         let title = this.getTitleForTimeSlot(timeslot);
-        return {start, end, title, allDay: false, rink: timeslot.rink.id};
+        let bookingId = timeslot.bookingId;
+        return {start, end, title, allDay: false, rink: timeslot.rink.id, bookingId};
     }
 
     getClockTimeString(time) {
@@ -69,17 +71,44 @@ export class CalendarComponent extends React.Component {
     }
 
     openModal(event) {
-        this.setState({
-            start: event.start, 
-            end: event.end, 
-            rink: event.rink,
-            isCreateBookingModalOpen: true
-        });
+        if (this.props.isCreateModal) {
+            this.setState({
+                start: event.start, 
+                end: event.end, 
+                rink: event.rink,
+                isCreateBookingModalOpen: true
+            });    
+        } else {
+            this.setState({
+                bookingId: event.bookingId,
+                isCreateBookingModalOpen: true
+            });
+        }
     }
 
-    closeModal () {
+    closeModal() {
         this.setState({ isCreateBookingModalOpen: false });
-        console.log(this.state);
+    }
+
+    getModalComponent() {
+        if (this.props.isCreateModal) {
+            return (
+                <CreateBookingComponent
+                    start={this.state.start}
+                    end={this.state.end}
+                    rink={this.state.rink}
+                    closeModal={this.closeModal}
+                    updateCalendar={this.getTimeSlots}
+                />
+            );
+        }
+        return (
+            <CancelBookingComponent
+                id={this.state.bookingId}
+                closeModal={this.closeModal}
+                updateCalendar={this.getTimeSlots}
+            />
+        );
     }
 
     render() {
@@ -108,23 +137,13 @@ export class CalendarComponent extends React.Component {
                         }
                     }}
                 >
-
-                    <CreateBookingComponent
-                        start={this.state.start}
-                        end={this.state.end}
-                        rink={this.state.rink}
-                        closeModal={this.closeModal}
-                        updateCalendar={this.getTimeSlots}
-                    />
-
+                    { this.getModalComponent() }
                 </Modal>
             </div>
 
             );
         } else {
             return (<div></div>);
-        }
-        
-        
+        }     
     }
 }

@@ -62,14 +62,7 @@ public class registerControllerTest {
         registerController = new RegisterController(authenticationManager, userService);
     }
 
-    @Test
-    public void registerTest() throws Exception {
-        when(userService.findUserByUsername(anyString())).thenReturn(null);
-        MockHttpServletResponse response = this.mockMvc.perform(get("/register"))
-            .andReturn().getResponse();
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-    }
-
+    
     @Test
     public void registerWithTakenUsername() throws Exception {
         when(userService.findUserByUsername(anyString())).thenReturn(new Customer(USERNAME, PASSWORD, EMAIL));

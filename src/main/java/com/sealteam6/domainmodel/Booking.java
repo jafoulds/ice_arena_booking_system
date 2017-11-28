@@ -1,6 +1,7 @@
 package com.sealteam6.domainmodel;
 
 import com.sealteam6.service.BookingDeserializer;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -8,6 +9,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 @JsonDeserialize(using = BookingDeserializer.class)
 public class Booking implements Comparable<Booking> {
 
@@ -27,17 +29,6 @@ public class Booking implements Comparable<Booking> {
         }
         return startDate.compareTo(o.startDate);
     }
-
-    public Booking() {}
-
-    public Booking(LocalDateTime startDate, LocalDateTime endDate, Rink rink, String usernameOfBooker, String group) {
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.rink = rink;
-        this.usernameOfBooker = usernameOfBooker;
-        this.groupName = group;
-    }
-
 }
 
 
