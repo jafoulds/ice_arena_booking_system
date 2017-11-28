@@ -5,6 +5,7 @@ import {CalendarComponent} from './CalendarComponent';
 import {Temp} from './temp';
 import {CreateGroup} from './createGroup';
 import {Schedule} from './schedule';
+import {ManageGroups} from './manageGroups';
 
 export class ProfilePage extends React.Component {
 
@@ -20,6 +21,7 @@ export class ProfilePage extends React.Component {
 			</div>
 			<div>
 				<Route exact path='/profile/createGroup' component={CreateGroup} />
+				<Route exact path='/profile/manageGroups' component={ManageGroups} />
 			</div>
 			</div>
 

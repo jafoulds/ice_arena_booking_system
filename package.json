@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/SENG330-17/project-team-6#readme",
   "dependencies": {
+    "material-ui": "^0.19.4",
     "moment": "^2.19.2",
     "react": "^16.0.0",
     "react-big-calendar": "^0.17.0",

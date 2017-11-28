@@ -51,7 +51,15 @@ module.exports = {
             }).then(result => {
                 callback(result);
             });
+    },
 
-
+    findAll: (callback) => {
+        fetch(API + '/findAll')
+            .then(result => {
+                return result.json();
+            }).then(result => {
+                callback(result);
+            });
     }
+
 }

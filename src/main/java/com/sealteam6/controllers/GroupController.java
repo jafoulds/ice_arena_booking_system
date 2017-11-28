@@ -65,7 +65,14 @@ public class GroupController {
     @RequestMapping("/getListOfUserGroups")
     public List<Group> getListOfUserGroups(){
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println(username);
+        System.out.println(groupRepository.getListOfUserGroups(username));
         return groupRepository.getListOfUserGroups(username);  
+    }
+    @RequestMapping("/findAll")
+    public List<Group> findAll(){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return groupRepository.findAll();  
     }
 
 }
