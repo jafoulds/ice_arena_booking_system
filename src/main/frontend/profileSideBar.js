@@ -17,7 +17,7 @@ export class ProfileSideBar extends React.Component {
 
 	render() {
 		return (
-			<div className='col-2' style={{float: 'left'}}>
+			<div>
 			<ul className='list-group' style={{textAlign: 'center'}}>
 				<li className='list-group-item'>
 					<Link to='/profile/schedule' style={this.state.linkStyle}>Schedule</Link>
