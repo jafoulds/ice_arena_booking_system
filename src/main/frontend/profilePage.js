@@ -6,7 +6,8 @@ import {Temp} from './temp';
 import {CreateGroup} from './createGroup';
 import {Schedule} from './schedule';
 import './styles/bootstrap.min.css';
-import {ManageGroups} from './manageGroups';
+import ManageGroups from './manageGroups';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 export class ProfilePage extends React.Component {
 
@@ -16,6 +17,7 @@ export class ProfilePage extends React.Component {
 
 	render() {
 		return (
+			<MuiThemeProvider>
 			<div className='row'>
 			  <div className='col-2'>
 				<ProfileSideBar />
@@ -24,8 +26,10 @@ export class ProfilePage extends React.Component {
 				<Route exact path='/profile/schedule' component={Schedule} />
 				<Route exact path='/profile/createGroup' component={CreateGroup} />
 				<Route exact path='/profile/manageGroups' component={ManageGroups} />
+
 			</div>
 			</div>
+			</MuiThemeProvider>
 
 		);
 	}

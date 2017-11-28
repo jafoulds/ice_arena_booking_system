@@ -116,7 +116,7 @@ module.exports = {
           .then(result => {
             callback(result)
           })
-      }
+      },
 
     getListOfUserGroups: (callback) => {
         fetch(API + '/getListOfUserGroups', {credentials: 'same-origin'})
