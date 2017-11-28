@@ -42,8 +42,9 @@ module.exports = {
     getCurrentUser: (callback) => {
     	fetch(API + '/getCurrentUser', {credentials: 'same-origin'})
     		.then(result => {
+          console.log(result);
     			return result.json();
-            }).then(result => {
+        }).then(result => {
     			callback(result);
     		});
     },
@@ -99,5 +100,22 @@ module.exports = {
               .then(result => {
                   callback(result)
               });
+      },
+
+      userIsLoggedIn: (callback) => {
+          fetch(API + "/userIsLoggedIn", {credentials: 'same-origin'})
+              .then(result => {
+                  return result.json();
+              }).then(result => {
+                  callback(result)
+              }); 
+      },
+
+      logout: (callback) => {
+        fetch('/logout', {credentials: 'same-origin', method: 'post'})
+          .then(result => {
+            callback(result)
+          })
       }
+
 }

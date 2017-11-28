@@ -11,33 +11,30 @@ export class Login extends React.Component {
 		}
 	}
 
-	inputChange(e) {
-		let newState = {};
-		newState[e.target.id] = e.target.value;
-		this.setState(newState);
-	}
-
 	render() {
 		return (
-				<form onSubmit={this.createGroup} className='justify-content-center'>
-				<div className='row'>
+			<div className='col-6'>
+				<div className='row justify-content-center'>
+					<h1>Login</h1>
+				</div>
+				<form method='POST' action='/login' className='justify-content-center'>
+				<div className='row justify-content-center'>
 				    <label> Username: 
-				    	<input className='m-2' type="text" id='username'
-				    		value={this.state.username} 
-				    		onChange={(e) => {this.inputChange(e)}}
+				    	<input className='m-2' type="text" name='username'
 			    		/> 
 			    	</label>
 		    	</div>
-		    	<div className='row'>
+		    	<div className='row justify-content-center'>
 				    <label> Password: 
-				    	<input className='m-2' type="password" id='password'
-				    		value={this.state.password}
-				    		onChange={(e) => {this.inputChange(e)}}
+				    	<input className='m-2' type="password" name='password'
 			    		/> 
 			    	</label>
 		    	</div>
+		    	<div className='row justify-content-center'>
 				    <button className='btn btn-primary'>Submit</button>
+				</div>
 				</form>
+			</div>
 		);
 	}
 

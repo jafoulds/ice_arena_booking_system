@@ -7,7 +7,7 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { Header } from './headerComponent';
 import {ProfilePage} from './profilePage';
 import requests from './requests';
-import {Login} from './login';
+import {LoginPage} from './loginPage';
 import './styles/bootstrap.min.css';
 
 exports.API = API;
@@ -32,7 +32,7 @@ class App extends React.Component {
                 <Header />
                 <div className='m-4'>
                 <Route exact path='/bookrink' render={this.passCalendar} />
-                <Route exact path='/login' component={Login} />
+                <Route exact path='/login' component={LoginPage} />
                 <Route path='/profile' component={ProfilePage} />
                 </div>
             </div>

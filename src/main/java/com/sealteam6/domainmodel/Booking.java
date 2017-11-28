@@ -29,16 +29,6 @@ public class Booking implements Comparable<Booking> {
         }
         return startDate.compareTo(o.startDate);
     }
-
-
-//    public Booking(LocalDateTime startDate, LocalDateTime endDate, Rink rink, String usernameOfBooker, String group) {
-//        this.startDate = startDate;
-//        this.endDate = endDate;
-//        this.rink = rink;
-//        this.usernameOfBooker = usernameOfBooker;
-//        this.groupName = group;
-//    }
-
 }
 
 

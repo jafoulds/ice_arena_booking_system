@@ -7,7 +7,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Temporary class for looking at User data
@@ -22,9 +24,16 @@ public class UserController {
 
 
     @RequestMapping(value = "/getCurrentUser", method = RequestMethod.GET)
-    public User getCurrentUser() {
+    public Map<String, String> getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return userRepository.findByUsername(authentication.getName());
+        return Collections.singletonMap("username", authentication.getName());
+    }
+
+    @RequestMapping(value = "/userIsLoggedIn", method = RequestMethod.GET)
+    public Map<String, Boolean> userIsLoggedIn() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean authenticated = authentication.getName() != "anonymousUser" && authentication.isAuthenticated();
+        return Collections.singletonMap("authenticated", authenticated);
     }
 
 }

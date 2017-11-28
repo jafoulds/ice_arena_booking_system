@@ -139,7 +139,6 @@ export class CalendarComponent extends React.Component {
                 >
                     { this.getModalComponent() }
                 </Modal>
-                }
             </div>
 
             );
