@@ -57,12 +57,13 @@ export class Header extends React.Component {
 				  <div className="col-6">
 				  	<HeaderElement route='/' text='Company Name' />
 				  </div>
+				  
 				  <div className="col-6">
 
 				  	<div className='row justify-content-end'>
 			          {this.state.elements}
-		          	</div>
-
+		          	</div>  
+		          	{/*
 			          <div className="navbar-brand col-2">
 			          	<Link to="/" style={this.state.color}>
 			          		Home
@@ -88,7 +89,9 @@ export class Header extends React.Component {
 			          		Bookings
 		          		</Link>
 			          </div>
+			      */}
 				 </div>
+				 
   		    </nav>
 		);
 	}
