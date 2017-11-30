@@ -10,6 +10,15 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * SENG-330/Fall 2017 - Project Iceman Cometh (Team 6)
+ * BookingController.java
+ * Purpose: Booking controller class - group reservation of a rink for a specified time period.
+ *
+ * @author Team 6
+ * @version 1.0 11/26/17
+ */
+
 @RestController
 @RequestMapping("/api")
 public class BookingController {
@@ -19,7 +28,11 @@ public class BookingController {
     @Autowired
     private BookingService bookingService;
 
-    // add new booking
+    /**
+     * Purpose: Create new booking.
+     * @param booking create booking request (JSON format).
+     * @return HTTP status for successful/unsuccessful repository update.
+     */
     @RequestMapping(value = "/addBooking", method=RequestMethod.POST, consumes="application/json")
     @ResponseBody
     public ResponseEntity<?> addBooking(@RequestBody Booking booking) {
@@ -28,26 +41,42 @@ public class BookingController {
             new ResponseEntity<>("Booking has conflict.", HttpStatus.CONFLICT);
     }
 
-    // get booking by id
+    /**
+     * Purpose: Get booking by id.
+     * @param id Requested booking (JSON format).
+     * @return Requested booking.
+     */
     @RequestMapping(value = "/getBooking", method=RequestMethod.GET)
     public Booking getBooking(String id) {
         return bookingRepository.findById(id);
     }
 
-    // get all bookings
+    /**
+     * Purpose: Get all bookings.
+     * @return List of all bookings.
+     */
     @RequestMapping(value = "/getBookings")
     public List<Booking> getBookings() {
         return bookingRepository.findAll();
     }
 
-    // delete by Booking ID
+    /**
+     * Purpose: Delete select booking.
+     * @param id booking to be deleted (JSON format).
+     * @return HTTP status for successful/unsuccessful repository update.
+     */
     @RequestMapping(value = "/cancelBooking", method=RequestMethod.GET)
     @ResponseBody
     public HttpStatus cancelBookingById(@RequestParam String id) {
         return bookingService.cancelBooking(id) ? HttpStatus.OK : HttpStatus.GONE;
     }
 
-    // delete all bookings in date range
+    /**
+     * Purpose: Delete bookings in a date range.
+     * @param startDate Start date of range (JSON format).
+     * @param endDate End date of range (JSON format).
+     * @return HTTP status for successful/unsuccessful repository update.
+     */
     @RequestMapping(value = "/cancelBookingsInDateRange", method=RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<?> cancelBookingsInDateRange(LocalDateTime startDate, LocalDateTime endDate) {
@@ -56,25 +85,19 @@ public class BookingController {
             new ResponseEntity<>("Booking does not exist.", HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE);
     }
 
-    // Test controls
+    // Manager controls
 
-    // delete all bookings
+    /**
+     * Purpose: Delete all bookings.
+     * @return HTTP status for successful/unsuccessful repository update.
+     */
     @RequestMapping(value = "/cancelAllBookings", method=RequestMethod.GET)
     @ResponseBody
-    public HttpStatus cancelAllBookings() {
+    public ResponseEntity<?>  cancelAllBookings() {
         List <Booking> bookings = bookingRepository.findAll();
         for (Booking booking : bookings) {
             bookingRepository.delete(booking);
         }
-        return HttpStatus.OK;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
-
-    // get all bookings
-    @RequestMapping(value = "/getAllBookings", method=RequestMethod.GET)
-    @ResponseBody
-    public List <Booking> getAllBookings() {
-        return bookingRepository.findAll();
-    }
-
-
 }

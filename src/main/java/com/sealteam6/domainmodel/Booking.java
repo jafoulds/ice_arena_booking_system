@@ -8,6 +8,15 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.time.LocalDateTime;
 
+/**
+ * SENG-330/Fall 2017 - Project Iceman Cometh (Team 6)
+ * Booking.java
+ * Purpose: Booking object class - group reservation of a rink for a specified time period.
+ *
+ * @author Team 6
+ * @version 1.0 11/26/17
+ */
+
 @Data
 @Builder
 @JsonDeserialize(using = BookingDeserializer.class)

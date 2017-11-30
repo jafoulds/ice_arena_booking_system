@@ -23,12 +23,16 @@ public class BookingDeserializer extends JsonDeserializer<Booking> {
     @Autowired
     private RinkRepository rinkRepository;
 
+    /**
+     * Purpose: Convert JavaScript ISO-8691 date format to Java LocalDateTime
+     * @return Requested Booking object with converted start/end dates.
+     */
     @Override
     public Booking deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         ObjectCodec oc = jsonParser.getCodec();
         JsonNode node = oc.readTree(jsonParser);
 
-        // Convert dates (BAD FIX: -8 hours to adjust for timezone difference
+        // Convert dates
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         LocalDateTime startDate = LocalDateTime.parse(node.get("startDate").asText(), formatter);
         LocalDateTime endDate = LocalDateTime.parse(node.get("endDate").asText(), formatter);

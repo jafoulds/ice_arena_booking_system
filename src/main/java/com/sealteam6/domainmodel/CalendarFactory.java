@@ -13,6 +13,17 @@ import java.time.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * SENG-330/Fall 2017 - Project Iceman Cometh (Team 6)
+ * CalendarFactory.java
+ * Purpose: CalendarFactory object class - Generates calendar views
+ * for customer users based on group owner's current bookings, or all bookings
+ * for manager users.
+ *
+ * @author Team 6
+ * @version 1.0 11/26/17
+ */
+
 @Component
 @Builder
 @AllArgsConstructor
@@ -30,6 +41,12 @@ public class CalendarFactory {
     @Autowired
     private GroupService groupService;
 
+    /**
+     * Purpose: Generates tailored month calendar view for user.
+     * @param yearMonth Year and month requested.
+     * @param user User requested.
+     * @return Calendar view.
+     */
     public Calendar createCalendarForUser(YearMonth yearMonth, User user) {
         List<Rink> rinks = rinkRepository.findAll();
         List<Booking> allBookingsForMonth =  getAllBookingsForMonthAndYear(yearMonth);
@@ -45,6 +62,12 @@ public class CalendarFactory {
         return new Calendar(calendarDays, yearMonth);
     }
 
+    /**
+     * Purpose: Returns rink availability based on date parameters.
+     * @param month Month requested.
+     * @param year User requested.
+     * @return Calendar of available timeslots for given month and year.
+     */
     public Calendar createCalendarOfAvailableTimeSlots(int month, int year) {
         List<Rink> rinks = rinkRepository.findAll();
         YearMonth yearMonth = YearMonth.of(year, month);
@@ -68,6 +91,11 @@ public class CalendarFactory {
         return new Calendar(calendarDays, yearMonth);
     }
 
+    /**
+     * Purpose: Returns bookings for given calendar day.
+     * @param bookings User-filtered bookings.
+     * @return Bookings for given calendar day.
+     */
     private CalendarDay bookingsToCalendarDay(List<Booking> bookings) {
         if (bookings.size() == 0) {
             return new CalendarDay(LocalDate.now(), Collections.emptyList());
@@ -86,6 +114,14 @@ public class CalendarFactory {
         return new CalendarDay(date, timeSlots);
     }
 
+    /**
+     * Purpose: Returns available time slots filtered by current bookings and operating hours.
+     * @param bookings List of user-filtered bookings.
+     * @param openingTime Opening time of arena
+     * @param closingTime Closing time of arena
+     * @param rinks List of rinks in arena.
+     * @return Available timeslots for the month.
+     */
     private List<TimeSlot> getAvailableTimeSlots(List<Booking> bookings, LocalTime openingTime,
                                                  LocalTime closingTime, List<Rink> rinks) {
 
@@ -104,6 +140,14 @@ public class CalendarFactory {
         return availableTimeSlots;
     }
 
+    /**
+     * Purpose: Returns available time slots filtered by rink.
+     * @param bookings List of user-filtered bookings.
+     * @param openingTime Opening time of arena
+     * @param closingTime Closing time of arena
+     * @param rink Requested rink.
+     * @return Available timeslots for the requested rink.
+     */
     private List<TimeSlot> getAvailableTimeSlotsForRink(List<Booking> bookings, LocalTime openingTime,
                                                         LocalTime closingTime, Rink rink) {
 
@@ -133,6 +177,12 @@ public class CalendarFactory {
         return availableTimeSlots;
     }
 
+    /**
+     * Purpose: Separate bookings by day in a given month.
+     * @param bookings List of user-filtered bookings.
+     * @param lengthOfMonth Number of days in given month.
+     * @return Bookings separated by day.
+     */
     private List<List<Booking>> separateByDay(List<Booking> bookings, int lengthOfMonth) {
         List<List<Booking>> bookingsByDay = new ArrayList<>();
         for (int i = 0; i < lengthOfMonth; i++) {
@@ -145,6 +195,11 @@ public class CalendarFactory {
 
     }
 
+    /**
+     * Purpose: Returns all bookings for a given month and year.
+     * @param month Requested month.
+     * @return Available bookings for the requested month.
+     */
     private List<Booking> getAllBookingsForMonthAndYear(YearMonth month) {
         LocalDateTime startOfMonth = LocalDateTime
                 .of(month.getYear(), month.getMonthValue(), 1, 0, 0);

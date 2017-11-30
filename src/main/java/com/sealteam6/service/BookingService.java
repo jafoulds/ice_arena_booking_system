@@ -9,16 +9,30 @@ import java.util.stream.Collectors;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * SENG-330/Fall 2017 - Project Iceman Cometh (Team 6)
+ * BookingService.java
+ * Purpose: Booking service class - Service layer for booking repository requests.
+ *
+ * @author Team 6
+ * @version 1.0 11/26/17
+ */
+
 @Service
 public class BookingService {
 
     @Autowired
     private BookingRepository bookingRepository;
 
+
     @Autowired
     public BookingService(BookingRepository bookingRepository) { this.bookingRepository = bookingRepository; }
 
-    // Create new booking
+    /**
+     * Purpose: Create new booking.
+     * @param booking The booking to be added to the calendar.
+     * @return Boolean for successful repository save.
+     */
     public Boolean createBooking(Booking booking) {
 
         // Check for booking conflicts
@@ -36,7 +50,11 @@ public class BookingService {
         } else {return false;}
     }
 
-    // Cancel booking
+    /**
+     * Purpose: Cancel an existing booking.
+     * @param id The id of the booking to be cancelled.
+     * @return Boolean for successful repository deletion.
+     */
     public boolean cancelBooking(String id) {
         Booking booking = bookingRepository.findById(id);
         if (booking!=null) {
@@ -45,7 +63,12 @@ public class BookingService {
         } else {return false;}
     }
 
-    // Cancel bookings in date range
+    /**
+     * Purpose: Cancel an existing bookings within a date range.
+     * @param startDate The start date of the booking to be cancelled.
+     * @param endDate The end date of the booking to be cancelled.
+     * @return Boolean for successful repository deletion.
+     */
     public boolean cancelBookingsInDateRange(LocalDateTime startDate, LocalDateTime endDate) {
         List<Booking> bookings = bookingRepository.findByDateBetween(startDate, endDate);
         if (bookings!=null) {
@@ -54,7 +77,11 @@ public class BookingService {
         } else {return false;}
     }
 
-    // Find booking by id
+    /**
+     * Purpose: Find a booking by id value.
+     * @param id The id of the booking to be cancelled.
+     * @return Found Booking object or null for not found.
+     */
     public Booking findById(String id) {
         return bookingRepository.findById(id);
     }
