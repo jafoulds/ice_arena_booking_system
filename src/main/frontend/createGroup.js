@@ -35,6 +35,4 @@ export class CreateGroup extends React.Component {
 		});
 
 	}
-
-
 }
