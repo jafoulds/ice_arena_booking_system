@@ -1,4 +1,6 @@
-# project-team-6
+# Ice Arena Booking System
+
+## Created by Cameron Elwood, Jared Foulds, Graham Grayson, Ben Hillier, & Spencer Rose
 
 ## Running on your machine
 [Install Maven](https://maven.apache.org/install.html)
